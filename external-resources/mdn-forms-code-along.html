@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MDN Forms Code Along</title>
+    <link rel="stylesheet" href="/external-resources/forms-styles.css" />
+    <style>
+      form {
+        /* Center the form on the page */
+        margin: 0 auto;
+        width: 400px;
+        /* Form outline */
+        padding: 1em;
+        border: 1px solid #ccc;
+        border-radius: 1em;
+      }
+
+      ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      form li + li {
+        margin-top: 1em;
+      }
+
+      label {
+        /* Uniform size & alignment */
+        display: inline-block;
+        width: 90px;
+        text-align: right;
+      }
+
+      input,
+      textarea {
+        /* To make sure that all text fields have the same font settings
+     By default, textareas have a monospace font */
+        font: 1em sans-serif;
+
+        /* Uniform text field size */
+        width: 300px;
+        box-sizing: border-box;
+
+        /* Match form field borders */
+        border: 1px solid #999;
+      }
+
+      input:focus,
+      textarea:focus {
+        /* Additional highlight for focused elements */
+        border-color: #000;
+      }
+
+      textarea {
+        /* Align multiline text fields with their labels */
+        vertical-align: top;
+
+        /* Provide space to type some text */
+        height: 5em;
+      }
+
+      .button {
+        /* Align buttons with the text fields */
+        padding-left: 90px; /* same size as the label elements */
+      }
+
+      button {
+        /* This extra margin represent roughly the same space as the space
+     between the labels and their text fields */
+        margin-left: 0.5em;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- <form> element defines where and how to send the data thanks to the action and method attributes -->
+    <!-- form data is sent to the server as name/value pairs -->
+    <!-- they let the server handle each piece of data by name -->
+    <!-- To name the data in a form you need to use the name attribute on each form widget that will collect a specific piece of data -->
+    <!-- It's strictly forbidden to nest a form inside another form. Nesting can cause forms to behave in an unpredictable manner, so it is a bad idea -->
+    <!-- It's always possible to use a form control outside of a <form> element. If you do so, by default that control has nothing to do with any form unless you associate it with a form using its form attribute -->
+    <form action="/my-handling-form-page" method="post">
+      <ul>
+        <li>
+          <label for="name">Name:</label>
+          <input type="text" id="name" name="user_name" />
+        </li>
+        <li>
+          <label for="mail">E-mail:</label>
+          <input type="email" id="mail" name="user_email" />
+        </li>
+        <li>
+          <label for="msg">Message:</label>
+          <textarea id="msg" name="user_message"></textarea>
+        </li>
+        <li class="button">
+          <button type="submit">Send your message</button>
+        </li>
+      </ul>
+    </form>
+
+    <!-- To define the default value of an <input> element you have to use the value attribute like this -->
+    <input
+      type="text"
+      value="by default this element is filled with this text"
+    />
+    <!-- On the other hand, if you want to define a default value for a <textarea>, you put it between the opening and closing tags of the <textarea> element, like this -->
+    <textarea>
+        by default this element is filled with this text
+    </textarea>
+
+    <!-- <button> element also accepts a type attribute — this accepts one of three values: submit, reset, or button -->
+    <!-- <input> element with the corresponding type to produce a button, for example <input type="submit"> -->
+    <!-- main advantage of the <button> element is that the <input> element only allows plain text in its label whereas the <button> element allows full HTML content, allowing more complex, creative button content -->
+
+    <!-- <fieldset> element is a convenient way to create groups of widgets that share the same purpose, for styling and semantic purposes -->
+    <!-- You can label a <fieldset> by including a <legend> element just below the opening <fieldset> tag -->
+    <!-- text content of the <legend> formally describes the purpose of the <fieldset> it is included inside -->
+    <!-- Many assistive technologies will use the <legend> element as if it is a part of the label of each control inside the corresponding <fieldset> element -->
+    <form>
+      <fieldset>
+        <legend>Fruit juice size</legend>
+        <p>
+          <input type="radio" name="size" id="size_1" value="small" />
+          <label for="size_1">Small</label>
+        </p>
+        <p>
+          <input type="radio" name="size" id="size_2" value="medium" />
+          <label for="size_2">Medium</label>
+        </p>
+        <p>
+          <input type="radio" name="size" id="size_3" value="large" />
+          <label for="size_3">Large</label>
+        </p>
+      </fieldset>
+    </form>
+
+    <!-- Each time you have a set of radio buttons, you should nest them inside a <fieldset> element -->
+    <!-- There are other use cases, and in general the <fieldset> element can also be used to section a form -->
+    <!-- If there is no label, or if the form control is neither implicitly nor explicitly associated with a label, a screenreader will read out something like "Edit text blank", which isn't very helpful at all -->
+    <!-- Another advantage of properly set up labels is that you can click or tap the label to activate the corresponding widget -->
+    <!-- This is useful for controls like text inputs, where you can click the label as well as the input to focus it, but it is especially useful for radio buttons and checkboxes — the hit area of such a control can be very small, so it is useful to make it as easy to activate as possible -->
+    <form>
+      <p>
+        <input
+          type="checkbox"
+          id="taste_1"
+          name="taste_cherry"
+          value="cherry"
+        />
+        <label for="taste_1">I like cherry</label>
+      </p>
+      <p>
+        <input
+          type="checkbox"
+          id="taste_2"
+          name="taste_banana"
+          value="banana"
+        />
+        <label for="taste_2">I like banana</label>
+      </p>
+    </form>
+
+    <!-- In the case of multiple labels, you should nest a widget and its labels inside a single <label> element -->
+    <!-- this is not a good idea as some assistive technologies can have trouble handling them -->
+    <p>Required fields are followed by <abbr title="required">*</abbr>.</p>
+
+    <!-- So this: -->
+    <!--div>
+  <label for="username">Name:</label>
+  <input id="username" type="text" name="username">
+  <label for="username"><abbr title="required" aria-label="required">*</abbr></label>
+</div-->
+
+    <!-- would be better done like this: -->
+    <!--div>
+  <label for="username">
+    <span>Name:</span>
+    <input id="username" type="text" name="username">
+    <abbr title="required" aria-label="required">*</abbr>
+  </label>
+</div-->
+
+    <!-- But this is probably best: -->
+    <div>
+      <label for="username"
+        >Name: <abbr title="required" aria-label="required">*</abbr></label
+      >
+      <input id="username" type="text" name="username" />
+    </div>
+    <!-- Titles being read aloud depend on the screen reader's settings, so it is more reliable to also include the aria-label attribute, which is always read by screen readers -->
+
+    <!-- it's common practice to wrap a label and its widget with a <li> element within a <ul> or <ol> list -->
+    <!-- <p> and <div> elements are also commonly used. Lists are recommended for structuring multiple checkboxes or radio buttons -->
+    <section>
+      <h2>Contact information</h2>
+      <fieldset>
+        <legend>Title</legend>
+        <ul>
+          <li>
+            <label for="title_1">
+              <input type="radio" id="title_1" name="title" value="K" />
+              King
+            </label>
+          </li>
+          <li>
+            <label for="title_2">
+              <input type="radio" id="title_2" name="title" value="Q" />
+              Queen
+            </label>
+          </li>
+          <li>
+            <label for="title_3">
+              <input type="radio" id="title_3" name="title" value="J" />
+              Joker
+            </label>
+          </li>
+        </ul>
+      </fieldset>
+      <p>
+        <label for="name">
+          <span>Name: </span>
+          <strong><abbr title="required">*</abbr></strong>
+        </label>
+        <input type="text" id="name" name="username" />
+      </p>
+      <p>
+        <label for="mail">
+          <span>E-mail: </span>
+          <strong><abbr title="required">*</abbr></strong>
+        </label>
+        <input type="email" id="mail" name="usermail" />
+      </p>
+      <p>
+        <label for="pwd">
+          <span>Password: </span>
+          <strong><abbr title="required">*</abbr></strong>
+        </label>
+        <input type="password" id="pwd" name="password" />
+      </p>
+    </section>
+    <section>
+      <h2>Payment information</h2>
+      <p>
+        <label for="card">
+          <span>Card type:</span>
+        </label>
+        <select id="card" name="usercard">
+          <option value="visa">Visa</option>
+          <option value="mc">Mastercard</option>
+          <option value="amex">American Express</option>
+        </select>
+      </p>
+      <p>
+        <label for="number">
+          <span>Card number:</span>
+          <strong><abbr title="required">*</abbr></strong>
+        </label>
+        <input type="tel" id="number" name="cardnumber" />
+      </p>
+      <p>
+        <label for="expiration">
+          <span>Expiration date:</span>
+          <strong><abbr title="required">*</abbr></strong>
+        </label>
+        <input
+          type="text"
+          id="expiration"
+          required="true"
+          placeholder="MM/YY"
+          pattern="^(0[1-9]|1[0-2])\/([0-9]{2})$"
+        />
+      </p>
+    </section>
+
+    <style>
+      body {
+        background-color: #fff;
+        color: #333;
+        font: 1em / 1.4 Helvetica Neue, Helvetica, Arial, sans-serif;
+        padding: 1em;
+        margin: 0;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+    </style>
+    <form>
+      <section>
+        <h2>Personal details</h2>
+        <fieldset>
+          <legend>User info</legend>
+          <label for="name">Name:</label>
+          <input type="text" id="name" name="name" />
+
+          <label for="age">Age:</label>
+          <input type="number" id="age" name="age" />
+        </fieldset>
+      </section>
+      <section>
+        <h2>Comment information</h2>
+        <fieldset>
+          <legend>message info</legend>
+          <label for="comment">Comment:</label>
+          <input type="text" id="comment" name="comment" />
+
+          <label for="email">Email:</label>
+          <input type="email" id="email" name="email" />
+        </fieldset>
+      </section>
+    </form>
+  </body>
+</html>
