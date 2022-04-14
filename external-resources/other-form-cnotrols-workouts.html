@@ -199,6 +199,215 @@
             output.textContent = invite.value;
         });
     </script>
+
+    <!-- main difference between a <textarea> and a regular single line text field is that users are allowed to include hard line breaks (i.e. pressing return) that will be included when the data is submitted -->
+    <!-- (Using contenteditable on non-form controls provides an API for capturing HTML/"rich" content instead of plain text) -->
+    <!-- 
+        <textarea> accepts three attributes to control its rendering across several lines: 
+            > cols: Specifies the visible width (columns) of the text control, measured in average character widths, can be changed by resizing the <textarea>, and overridden using CSS
+            > rows: Specifies the number of visible text rows for the control. This is effectively the starting height, as it can be changed by resizing the <textarea>, and overridden using CSS
+            > wrap: Specifies how the control wraps text. The values are soft (the default value), which means the text submitted is not wrapped but the text rendered by the browser is wrapped; hard (the cols attribute must be specified when using this value), which means both the submitted and rendered texts are wrapped, and off, which stops wrapping
+        
+        The ability to resize a <textarea> is controlled with the CSS resize property
+            > both: The default — allows resizing horizontally and vertically
+            > horizontal: Allows resizing only horizontally
+            > vertical: Allows resizing only vertically
+            > none: Allows no resizing 
+            > block/inline: Experimental values that allow resizing in the block or inline direction only, either horizontally or vertically, depending on the writing-mode and direction value
+    -->
+    <!-- dropdown controls are simple way to let users choose from many different options without taking up so much space -->
+    <!-- On the <optgroup> element, the value of the label attribute is displayed before the values of the nested options -->
+    <!-- If an <option> element has an explicit value attribute set on it, that value is sent when the form is submitted with that option selected. If the value attribute is omitted, as with the examples above, the content of the <option> element is used as the value, optional size attribute provides control over how many options are visible when the select does not have focus -->
+    <!-- By adding the multiple attribute to the <select> element, you can allow users to select several values, by using the default mechanism provided by the operating system (e.g. holding down Cmd/Ctrl and clicking multiple values on desktop) -->
+    <!-- In the case of multiple choice select boxes, you'll notice that the select box no longer displays the values as drop-down content — instead, all values are displayed at once in a list, with the optional size attribute determining the height of the widget -->
+    <!-- You can provide suggested, automatically-completed values for form widgets using the <datalist> element with child <option> elements to specify the values to display, <datalist> needs to be given an id -->
+    <!-- data list is then bound to an <input> element (e.g. a text or email input type) using the list attribute, the value of which is the id of the data list to bind -->
+    <!-- Once a data list is affiliated with a form widget, its options are used to auto-complete text entered by the user; typically, this is presented to the user as a drop-down box listing possible matches for what they've typed into the input -->
+    <!-- If you use this fallback, ensure the data for both the <input> and the <select> are collected   by/in   server-side. -->
+    <!-- list attribute and the <datalist> element can be used with any kind of widget requiring a user input. -->
+    <!-- different browsers behave differently from case to case, so consider such uses as progressive enhancement, and ensure they     degrade  (fallback)     gracefully  -->
+
+    <form>
+        <p>
+            <label for="simple">A simple select box:</label>
+            <select id="simple" name="simple">
+                <option>Banana</option>
+                <option>Cherry</option>
+                <option>Lemon</option>
+            </select>
+        </p>
+        <p>
+            <label for="groups">Select box with option groups:</label>
+            <select id="groups" name="groups">
+                <optgroup label="fruits">
+                    <option>Banana</option>
+                    <option selected>Cherry</option>
+                    <option>Lemon</option>
+                </optgroup>
+                <optgroup label="vegetables">
+                    <option>Carrot</option>
+                    <option>Eggplant</option>
+                    <option>Potato</option>
+                </optgroup>
+            </select>
+        </p>
+        <p>
+            <label for="multi">Select box allowing multiple selections:</label>
+            <select multiple id="multi" name="multi">
+                <option>Banana</option>
+                <option>Cherry</option>
+                <option>Lemon</option>
+            </select>
+        </p>
+        <p>
+            <label for="myFruit">What's your favorite fruit?</label>
+            <input type="text" name="myFruit" id="myFruit" list="mySuggestion">
+            <datalist id="mySuggestion">
+                <option>Apple</option>
+                <option>Banana</option>
+                <option>Blackberry</option>
+                <option>Blueberry</option>
+                <option>Lemon</option>
+                <option>Lychee</option>
+                <option>Peach</option>
+                <option>Pear</option>
+            </datalist>
+        </p>
+        <p>
+            <label for="myFruit">What is your favorite fruit? (With fallback)</label>
+            <input type="text" id="myFruit" name="fruit" list="fruitList">
+            <datalist id="fruitList"> <label for="suggestion">or pick a fruit</label>
+                <select id="suggestion" name="altFruit">
+                    <option>Apple</option>
+                    <option>Banana</option>
+                    <option>Blackberry</option>
+                    <option>Blueberry</option>
+                    <option>Lemon</option>
+                    <option>Lychee</option>
+                    <option>Peach</option>
+                    <option>Pear</option>
+                </select>
+            </datalist>
+        </p>
+        <p>
+            <button type="submit">Submit me!</button>
+        </p>
+    </form>
+
+    <!-- other less common form feature uses -->
+    <!-- Meters and progress bars are visual representations of numeric values -->
+    <!-- 
+        All browsers that implement the <meter> element use those values to change the color of the meter bar
+            > If the current value is in the preferred part of the range, the bar is green
+            > If the current value is in the average part of the range, the bar is yellow
+            > If the current value is in the worst part of the range, the bar is red
+     -->
+    <form>
+        <p>
+            <label for="file">Choose an image to upload</label>
+            <input type="file" name="file" id="file" accept="image/*" multiple>
+        </p>
+        <div>
+            <input type="hidden" id="timestamp" name="timestamp" value="1286705410">
+        </div>
+        <p>
+            <input type="image" name="pos" alt="" src="map.png">
+        </p>
+        <p>
+            <progress max="100" value="75">75/100</progress>
+        </p>
+        <p>
+            <meter min="0" max="100" value="75" low="33" high="66" optimum="50">75</meter>
+        </p>
+    </form>
+
+    <!-- some exercises -->
+    <!-- 
+        Other controls 1: 
+        > In our first "other controls" assessment, we'll get you to create a multi-line text input
+            > Create a basic multi-line text input
+            > Associate it semantically with the provided "Comment" label
+            > Give the input 35 columns, and 10 rows of space in which to add comments
+            > Give the comments a maximum length of 100 characters
+    -->
+    <form>
+        <h2>Enter your comment</h2>
+        <ul>
+            <li>
+                <label for="name">Name:</label>
+                <input type="text" name="name" id="name">
+            </li>
+            <li>
+                <label for="comment">Comment:</label>
+                <!-- add your input here  -->
+                <textarea name="comment" id="comment" cols="35" rows="10" maxlength="100"></textarea>
+            </li>
+            <li>
+                <button>Submit comment</button>
+            </li>
+        </ul>
+    </form>
+    <!-- 
+        Other controls 2:
+        implement a drop-down select menu, to allow a user to pick their favorite food from the choices provided
+            > Create your basic select box structure
+            > Associate it semantically with the provided "food" label
+            > Inside the list, split the choices up into 2 subgroups — "mains" and "snacks"
+     -->
+    <form>
+        <ul>
+            <li>
+                <label for="food">Pick your favorite food:</label>
+                <select name="food-choice" id="food">
+                    <optgroup label="mains">
+                        <option value="Salad">Salad</option>
+                        <option value="Curry">Curry</option>
+                        <option value="Pizza">Pizza</option>
+                        <option value="Fajitas">Fajitas</option>
+                    </optgroup>
+
+                    <optgroup label="snacks">
+                        <option value="Biscuits">Biscuits</option>
+                        <option value="Crisps">Crisps</option>
+                        <option value="Fruit">Fruit</option>
+                        <option value="Breadsticks">Breadsticks</option>
+                    </optgroup>
+                </select>
+            </li>
+            <li>
+                <button>Submit choice</button>
+            </li>
+        </ul>
+    </form>
+
+    <!-- 
+        Other controls 3: 
+        > Create a basic text input that is semantically associated with the provided label
+        > Put the food choices into a list that can be associated with a form input
+        > Associate the list with your text input, so that when you type characters, any of the list options that match the character sequence are given in a dropdown list as autocomplete suggestions
+    -->
+    <form>
+        <ul>
+            <li>
+                <label for="food">Enter your favorite food:</label>
+                <input type="text" list="availableChoices" id="food">
+                <datalist id="availableChoices">
+                    <option value="Salad">Salad</option>
+                    <option value="Curry">Curry</option>
+                    <option value="Pizza">Pizza</option>
+                    <option value="Fajitas">Fajitas</option>
+                    <option value="Biscuits">Biscuits</option>
+                    <option value="Crisps">Crisps</option>
+                    <option value="Fruit">Fruit</option>
+                    <option value="Breadsticks">Breadsticks</option>
+                </datalist>
+
+            </li>
+            <li>
+                <button>Submit choice</button>
+            </li>
+        </ul>
+    </form>
 </body>
 
 </html>
