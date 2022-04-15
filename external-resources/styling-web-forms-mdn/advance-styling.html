@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced forms styling</title>
+</head>
+
+<body>
+    <!-- 
+
+        Some elements are more difficult to style, requiring more complex CSS or some more specific tricks 
+            > Checkboxes and radio buttons
+            > <input type="search">
+        Some elements can't be styled thoroughly using CSS. These include
+            > Elements involved in creating dropdown widgets, including <select>, <option>, <optgroup> and <datalist>
+            > <input type="color">
+            > Date-related controls such as <input type="datetime-local">
+            > <input type="range">
+            > <input type="file">
+            > <progress> and <meter>
+        
+        Let's first talk about the appearance property, which is pretty useful for making all of the above more stylable
+        
+        appearance: controlling OS-level styling:
+        > appearance property was created as a way to control what OS- or system-level styling was applied to web form controls.
+        > behavior of this property's original implementations was very different across browsers, making it not very usable
+        > Newer implementations are more consistent in behavior; interestingly enough,    both    Chromium-based browsers (Chrome, Opera, Edge), Safari, and Firefox all support the -webkit- prefixed version (-webkit-appearance)
+        > -webkit-appearance: none, is most commonly used, This stops any control you apply    it to (to it)    from using system-level styling, as much as possible, and lets you build up the styles yourself using CSS
+        > for example : input {-webkit-appearance: none;appearance: none;}, emoves system-level styling styling from all inputs element
+        > It is a good idea to always include both declarations — prefixed and unprefixed — when using a prefixed property. Prefixed usually means "work in progress", so in the future browser vendors may come to a consensus to drop the prefix
+
+        Search boxes:
+        > search boxes have some styling restrictions — you can't adjust their height or font-size freely, for example
+        > which enabled Aqua appearance by default for certain form controls. With Aqua enabled, some form controls are not scalable
+        > This can be fixed using our friend appearance: none;, which disables the default Aqua appearance
+        > Interestingly, setting border/background on the search field also fixes this problem, as it disables or "breaks" the Aqua appearance too
+    -->
+    <style>
+        input[type="search"] {
+            -webkit-appearance: none;
+            appearance: none;
+            background-color: #333;
+        }
+
+        /* You may have noticed that in the search field, the "x" delete icon disappears when the input loses focus in Edge and Chrome, but stays put in Safari. To remove via CSS */
+        input[type="search"]::-webkit-search-cancel-button {
+            display: none;
+        }
+    </style>
+    <label for="search-box"></label>
+    <input type="search" name="search-box" id="search-box">
+
+    <!-- 
+        Styling checkboxes and radio buttons
+        > sizes of check boxes and radio buttons are not meant to be changed with their default designs, and browsers react very differently when you try
+        > consider this following styes on span => checkbox, Different browsers handle this in many different, often ugly ways
+     -->
+    <style>
+        span {
+            display: inline-block;
+            background: red;
+        }
+
+        /* input[type="checkbox"] {
+            width: 100px;
+            height: 100px;
+        } */
+    </style>
+    <span><input type="checkbox"></span>
+
+    <!-- lUsing appearance: none on radios/checkboxes -->
+    <style>
+        input[type="checkbox"] {
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        input[type="checkbox"] {
+            position: relative;
+            width: 1em;
+            height: 1em;
+            border: 1px solid gray;
+            /* Adjusts the position of the checkboxes on the text baseline */
+            vertical-align: -2px;
+            /* Set here so that Windows' High-Contrast Mode can override */
+            color: green;
+        }
+
+        input[type="checkbox"]::before {
+            content: "✔";
+            position: absolute;
+            font-size: 1.2em;
+            right: -1px;
+            top: -0.3em;
+            visibility: hidden;
+        }
+
+        input[type="checkbox"]:checked::before {
+            /* Use `visibility` instead of `display` to avoid recalculating layout */
+            visibility: visible;
+        }
+
+        input[type="checkbox"]:disabled {
+            border-color: black;
+            background: #ddd;
+            color: gray;
+        }
+    </style>
+    <form>
+        <fieldset>
+            <legend>Fruit preferences</legend>
+
+            <p>
+                <label>
+                    <input type="checkbox" name="fruit-1" value="cherry">
+                    I like cherry
+                </label>
+            </p>
+            <p>
+                <label>
+                    <input type="checkbox" name="fruit-2" value="banana" disabled>
+                    I can't like banana
+                </label>
+            </p>
+            <p>
+                <label>
+                    <input type="checkbox" name="fruit-3" value="strawberry">
+                    I like strawberry
+                </label>
+            </p>
+        </fieldset>
+    </form>
+
+    <!-- The problem is that these elements (color picker, datetime, progress, meter, dropdowm etc) have   (a)   very different default looks across browsers, and while you can style them in some ways, some parts of their internals are literally impossible to style -->
+    <!-- you can get away with some simple styling to make sizing consistent, uniform styling of things like background-colors, and usage of appearance to get rid of some system-level styling -->
+    <!-- We've applied some global normalizing CSS to all the controls and their labels, to get them to size in the same way, adopt their parent font, etc. -->
+    <!-- We also added some uniform shadow and rounded corners to the controls on which it made sense -->
+    <!-- On other controls like range types, progress bars, and meters they just add an ugly box around the control area, so it doesn't make sense -->
+
+    <style>
+        body {
+            font-family: 'Josefin Sans', sans-serif;
+            margin: 20px auto;
+            max-width: 400px;
+        }
+
+        form>div {
+            margin-bottom: 20px;
+        }
+
+        button,
+        label,
+        input,
+        select,
+        progress,
+        meter {
+            display: block;
+            font-family: inherit;
+            font-size: 100%;
+            margin: 0;
+            box-sizing: border-box;
+            width: 100%;
+            padding: 5px;
+            height: 30px;
+        }
+
+        select {
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        .select-wrapper {
+            position: relative;
+        }
+
+        .select-wrapper::after {
+            content: "▼";
+            font-size: 1rem;
+            top: 6px;
+            right: 10px;
+            position: absolute;
+        }
+
+        input[type="text"],
+        input[type="datetime-local"],
+        input[type="color"],
+        select {
+            box-shadow: inset 1px 1px 3px #ccc;
+            border-radius: 5px;
+        }
+
+        label {
+            margin-bottom: 5px;
+        }
+
+        button {
+            width: 60%;
+            margin: 0 auto;
+        }
+    </style>
+    <form>
+        <div>
+            <label for="select">Select box:</label>
+            <div class="select-wrapper"><select id="select" name="select">
+                    <option>Banana</option>
+                    <option>Cherry</option>
+                    <option>Lemon</option>
+                </select></div>
+        </div>
+        <div>
+            <label for="myFruit">"Favorite fruit?" datalist:</label>
+            <input type="text" name="myFruit" id="myFruit" list="mySuggestion">
+            <datalist id="mySuggestion">
+                <option>Apple</option>
+                <option>Banana</option>
+                <option>Blackberry</option>
+                <option>Blueberry</option>
+                <option>Lemon</option>
+                <option>Lychee</option>
+                <option>Peach</option>
+                <option>Pear</option>
+            </datalist>
+        </div>
+        <div>
+            <label for="date1">Datetime local: </label>
+            <input id="date1" name="date1" type="datetime-local">
+        </div>
+        <div>
+            <label for="range">Range: </label>
+            <input id="range" name="range" type="range">
+        </div>
+        <div>
+            <label for="color">Color: </label>
+            <input id="color" name="color" type="color">
+        </div>
+        <div>
+            <label for="file">File picker: </label>
+            <input id="file" name="file" type="file" multiple>
+            <ul id="file-list">
+
+            </ul>
+        </div>
+        <div>
+            <label for="progress">Progress: </label>
+            <progress max="100" value="75" id="progress">75/100</progress>
+        </div>
+        <div>
+            <label for="meter">Meter: </label>
+            <meter id="meter" min="0" max="100" value="75" low="33" high="66" optimum="50">75</meter>
+        </div>
+        <div><button>Submit?</button></div>
+    </form>
+
+    <script>
+        const fileInput = document.querySelector('#file');
+        const fileList = document.querySelector('#file-list');
+
+        fileInput.addEventListener('change', updateFileList);
+
+        function updateFileList() {
+            while (fileList.firstChild) {
+                fileList.removeChild(fileList.firstChild);
+            }
+
+            let curFiles = fileInput.files;
+
+            if (!(curFiles.length === 0)) {
+                console.log('test');
+                for (let i = 0; i < curFiles.length; i++) {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = 'File name: ' + curFiles[i].name + '; file size ' + returnFileSize(curFiles[i].size) + '.';
+                    fileList.appendChild(listItem);
+                }
+            }
+        }
+
+        function returnFileSize(number) {
+            if (number < 1024) {
+                return number + 'bytes';
+            } else if (number >= 1024 && number < 1048576) {
+                return (number / 1024).toFixed(1) + 'KB';
+            } else if (number >= 1048576) {
+                return (number / 1048576).toFixed(1) + 'MB';
+            }
+        }
+    </script>
+
+    <!-- 
+        Selects and datalists:
+        > select's "arrow" icon that indicates it is a dropdown differs across browsers. 
+        > It also tends to change if you increase the size of the select box, or resize in an ugly fashion. 
+        > To fix this in our example we first used our old friend appearance: none to get rid of the icon altogether
+        > We then created our own icon using generated content
+        > We put an extra wrapper around the control, because ::before/::after don't work on <select> elements (this is because generated content is placed relative to an element's formatting box, but form inputs work more like replaced elements — their display is generated by the browser and put in place — and therefore don't have one)
+        > We then use generated content to generate a little down arrow, and put it in the right place using positioning
+        > slightly more major issue is that you don't have control over the box that appears containing the options when you click on the <select> box to open it
+        > You'll notice that the options don't inherit the font set on the parent. You also can't consistently set things like spacing and colors
+        > For example, Firefox will apply color and background-color when set on the <option> elements, Chrome won't. Neither of them will apply any kind of spacing (e.g. padding). The same is also true of the autocomplete list that appears for the datalist
+        > If you really need full control over the option styling, you'll have to either use some kind of library to generate a custom control, or build your own custom control, or in the case of select use the multiple attribute, which makes all the options appear on the page, sidestepping this particular problem 
+        
+        Date input types:
+        > date/time input types (datetime-local, time, week, month) all have the same major associated issue
+        > The actual containing box is as easy to style as any text input
+        >       However, the internal parts of the control (e.g. the popup calendar that you use to pick a date, the spinner that you can use to increment/decrement values) are not stylable at all, and you can't get rid of them using    "  appearance: none;  "
+        > If you really need full control over the styling, you'll have to either use some kind of library to generate a custom control, or build your own
+
+        Range input types:
+        > You can use something like the following to remove the default slider track completely and replace it with a custom style (a thin red track, in this case)
+            > input[type="range"] {appearance: none;-webkit-appearance: none;background: red;height: 2px;padding: 0;outline: 1px solid transparent;}
+        > However, it is very difficult to customize the style of the range control's drag handle — to get full control over range styling you'll need to use a whole bunch of complex CSS code, including multiple non-standard, browser-specific pseudo-element
+
+        Color input types:
+        > they tend to just give you a block of solid color with a small border
+        > You can remove the border, just leaving the block of color, using something like this: input[type="color"] {border: 0;padding: 0;}
+        > However, a custom solution is the only way to get anything significantly different
+
+        File input types:
+        > it is fairly easy to create something that fits in OK with the rest of the page
+        > The only problem with file pickers is that the button provided that you press to open the file picker is completely unstylable — it can't be sized or colored, and it won't even accept a different font
+        > One way around this is to take advantage of the fact that if you have a label associated with a form control, clicking the label will activate the control. So you could hide the actual form input using something like this: input[type="file"] {height: 0;padding: 0;opacity: 0;}
+        > And then style the label to act like a button, which when pressed will open the file picker as expected
+     -->
+    <style>
+        body {
+            font-family: 'Josefin Sans', sans-serif;
+            margin: 20px auto;
+            max-width: 400px;
+        }
+
+        form>div {
+            margin-bottom: 20px;
+        }
+
+        button,
+        label,
+        input {
+            display: block;
+            font-family: inherit;
+            font-size: 100%;
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+            width: 100%;
+            padding: 5px;
+            height: 30px;
+        }
+
+        input[type="file"] {
+            height: 0;
+            padding: 0;
+            opacity: 0;
+        }
+
+        label[for="file"] {
+            box-shadow: 1px 1px 3px #ccc;
+            background: linear-gradient(to bottom, #eee, #ccc);
+            border: 1px solid rgb(169, 169, 169);
+            border-radius: 5px;
+            text-align: center;
+            line-height: 1.5;
+        }
+
+        label[for="file"]:hover {
+            background: linear-gradient(to bottom, #fff, #ddd);
+        }
+
+        label[for="file"]:active {
+            box-shadow: inset 1px 1px 3px #ccc;
+        }
+
+        button {
+            width: 60%;
+            margin: 0 auto;
+        }
+    </style>
+    <form>
+        <div>
+            <label for="file">Choose a file to upload</label>
+            <input id="file" name="file" type="file" multiple>
+            <ul id="file-list">
+
+            </ul>
+        </div>
+        <div><button>Submit?</button></div>
+    </form>
+
+    <script>
+        const fileInput1 = document.querySelector('#file');
+        const fileList1 = document.querySelector('#file-list');
+
+        fileInput1.addEventListener('change', updateFileList);
+
+        function updateFileList() {
+            while (fileList1.firstChild) {
+                fileList1.removeChild(fileList1.firstChild);
+            }
+
+            let curFiles = fileInput1.files;
+
+            if (!(curFiles.length === 0)) {
+                console.log('test');
+                for (let i = 0; i < curFiles.length; i++) {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = 'File name: ' + curFiles[i].name + '; file size ' + returnFileSize(curFiles[i].size) + '.';
+                    fileList1.appendChild(listItem);
+                }
+            }
+        }
+
+        function returnFileSize(number) {
+            if (number < 1024) {
+                return number + 'bytes';
+            } else if (number >= 1024 && number < 1048576) {
+                return (number / 1024).toFixed(1) + 'KB';
+            } else if (number >= 1048576) {
+                return (number / 1048576).toFixed(1) + 'MB';
+            }
+        }
+    </script>
+    <!-- 
+        Meters and progress bars:
+        > we can set them to a desired width relatively accurately. But beyond that, they are really difficult to style in any way
+        >      They don't handle height settings consistently between each other and between browsers, you can color the background, but not the foreground bar, and setting    "  appearance: none  "   on them makes things worse, not better
+        > It is easier to just create your own custom solution for these features, if you want to be able to control the styling, or use a third-party solution such as progressbar.js
+
+        The road to nicer forms: useful libraries and polyfills:
+        > As we've mentioned above a few times, if you want to gain full control over the "ugly" control types, you have no choice but to rely on JavaScript
+        > there are some very useful libraries out there that can help you, such as: Uni-form, Formalize
+     -->
+
+    <!-- some exercises -->
+    <!-- 
+         Advanced form styling 1: a search input as consistent as possible across browsers:
+            > First of all, try giving the search box a consistent width, height, padding, and border color across browsers
+            > You'll find that some browsers will not behave in terms of the form element's height. This is due to native OS styling being used in some cases. How can you remove this native styling?
+            > Once you've removed the native styling, you'll need to add back one of the features it was providing, to keep the same look and feel we originally had. How do you do this?
+            > One thing that is inconsistent across browsers (particularly looking at Safari here) is the position of the standard blue focus outline. How can you remove this?
+            > There is a major problem with just getting rid of the blue focus outline. What is it? Can you add some kind of styling back in so that users can tell when the search box is being hovered or focused?
+            > Another thing that commonly denotes a search box is a magnifying glass icon. We've made one available in the same directory as our HTML files — see search-24px.png — plus a <div> element after the search input to help you attach it, should you need it. Can you figure out a sensible way to attach it, and can you use some CSS to get it to sit to the right of the search box, and be lined up vertically as well?
+      -->
+    <!-- <style>
+        body {
+            background-color: #fff;
+            color: #333;
+            font: 1em / 1.4 Helvetica Neue, Helvetica, Arial, sans-serif;
+            padding: 1em;
+            margin: 0;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        button,
+        input,
+        select {
+            font-family: inherit;
+            font-size: 100%;
+            padding: 0;
+            margin: 0;
+        }
+        
+        input[type='search'] {
+            appearance: none;
+            width: 400px;
+            height: 92px;
+            padding: 11px;
+            border-color: aqua;
+        }
+
+    </style>
+    <form>
+        <input type="search" name="search" id="search" aria-label="Search our site">
+        <div></div>
+    </form> -->
+</body>
+
+</html>
