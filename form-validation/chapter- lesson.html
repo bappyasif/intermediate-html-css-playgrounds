@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Validation</title>
+</head>
+
+<body>
+    <!-- Validations allow us to set specific constraints or rules that determine what data users can enter into an input -->
+    <!-- When a user enters data that breaks the rules, a message will appear, providing feedback on what was wrong with the entered data and how to fix it -->
+
+    <!-- Required Validation -->
+    <!-- To make a field required, we simply add the required attribute to it -->
+    <!-- To ensure a good user experience and to meet accessibility guidelines, we should always indicate which fields are required -->
+    <!-- his will often be done by adding an asterisk(*) to the required field label -->
+
+    <!-- Text Length Validations -->
+    <!-- Sometimes we will want users to enter a minimum or a maximum amount of text into a field -->
+
+    <!-- Minimum Length Validation -->
+    <!-- To add the minimum length validation, we give the form control a minlength attribute with an integer value that represents the minimum amount of characters we want to allow in the form control -->
+
+    <!-- Maximum Length Validation -->
+    <!-- To add a maximum length validation, we give the form control a maxlength attribute with an integer value which represents the maximum amount of characters we want to allow in the form control -->
+
+    <!-- Combining Validations -->
+    <!-- HTML allows us to apply as many validations as we wish to a form control, HTML allows us to apply as many validations as we wish to a form control -->
+
+    <!-- Number Range Validations -->
+    <!-- min and max attributes only work with number-based form controls such as the number, dates and time inputs -->
+
+    <!-- Min Validation -->
+    <!-- To add a minimum value validation, we give the form control a min attribute with an integer value which represents the minimum number we want the form control to accept -->
+
+    <!-- Min Validation -->
+    <!-- To add a maximum value validation, we give the form control a max attribute with an integer value which represents the maximum number we want the form control to accept -->
+
+    <!-- Pattern Validations -->
+    <!-- To ensure we get the correct information from users, we will often want to ensure data matches a particular pattern -->
+    <!-- To add a pattern validation, we give the form control a pattern attribute with a regular expression as the value -->
+    <!-- We can add a more descriptive validation message by giving our input a title attribute -->
+    <!-- It is also good practice to use a placeholder attribute to show users an example of the expected pattern they need to enter -->
+    <!-- The pattern attribute can only be used on <input> elements. Some input elements already validate data that matches a certain pattern -->
+    <!-- For example the email input field which will make sure a valid email is entered and the url input element which will check to ensure the url starts with http or https -->
+
+
+    <form action="#" method="get">
+        <div>
+            <label for="zip_code">Postal / Zip Code:</label>
+        </div>
+
+        <input type="text" id="zip_code" name="zip_code" pattern="(\d{5}([\-]\d{4})?)"
+            title="Please enter a valid zip code, example: 65251" placeholder="65251" required>
+
+        <div>
+            <label for="email">Email:</label>
+        </div>
+        <input type="email" id="email" name="email">
+
+        <div>
+            <label for="website">Website:</label>
+        </div>
+        <input type="url" id="website" name="website">
+
+        <div>
+            <button type="submit">Submit</button>
+        </div>
+    </form>
+
+    <!-- Styling Validations -->
+    <!-- We can target form controls that have passed or failed validations using the :valid and :invalid pseudo-classes -->
+    <style>
+        input {
+            border: 2px solid #000;
+            margin-bottom: 15px;
+            padding: 5px;
+            border-radius: 5px;
+        }
+
+        input:invalid {
+            border-color: red;
+        }
+
+        input:valid {
+            border-color: green;
+        }
+    </style>
+    <form action="#" method="get">
+        <div>
+            <label for="email">*Email</label>
+        </div>
+        <input type="email" id="email" name="email">
+
+        <div>
+            <label for="website">*Website</label>
+        </div>
+        <input type="url" id="website" name="website">
+
+        <div>
+            <button type="submit">Submit</button>
+        </div>
+    </form>
+
+    <!-- conclusion -->
+    <!-- The built-in validations will take you far with ensuring your users enter the correct data. They are quick and easy to add. However, they have their limitations -->
+    <!-- we will need to get creative and make custom validations using JavaScript and CSS -->
+    <!-- It’s also worth noting client-side validations are not a silver bullet for ensuring users enter the correct data. To ensure the integrity of any user data coming into our systems, we should also have server-side validations in place -->
+    
+</body>
+
+</html>

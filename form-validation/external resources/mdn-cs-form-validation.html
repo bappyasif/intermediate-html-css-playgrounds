@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client side form validation</title>
+</head>
+
+<body>
+    <!-- Before submitting data to the server, it is important to ensure all required form controls are filled out, in the correct format. This is called client-side form validation, and helps ensure data submitted matches the requirements set forth in the various form controls. -->
+    <!-- Client-side validation is an initial check and an important feature of good user experience; by catching invalid data on the client-side, the user can fix it straight away -->
+    <!-- client-side validation should not be considered an exhaustive security measure! Your apps should always perform security checks on any form-submitted data on the server-side as well as the client-side, because client-side validation is too easy to bypass, so malicious users can still easily send bad data through to your server -->
+
+    <!-- What is form validation? -->
+    <!-- When you enter data, the browser and/or the web server will check to see that the data is in the correct format and within the constraints set by the application -->
+    <!-- Validation done in the browser is called client-side validation, while validation done on the server is called server-side validation -->
+    <!-- If the information is correctly formatted, the application allows the data to be submitted to the server and (usually) saved in a database; if the information isn't correctly formatted, it gives the user an error message explaining what needs to be corrected, and lets them try again -->
+    <!-- Never trust data passed to your server from the client. Even if your form is validating correctly and preventing malformed input on the client-side, a malicious user can still alter the network request -->
+
+    <!-- 
+        Different types of client-side validation: 
+            > Built-in form validation: uses HTML5 form validation features, but it is not as customizable as js validation
+            > Javascript vcalidation: is coded using JavaScript, is completely customizable, but you need to create it all (or use a library)
+
+        Using built-in form validation:
+            > required, min/maxlength, min/max, type, pattern
+            > If the data entered in a form field follows all of the rules specified by the above attributes, it is considered valid. If not, it is considered invalid
+        
+        When an element is valid, the following things are true:
+            > element matches the :valid CSS pseudo-class, which lets you apply a specific style to valid elements
+            > If the user tries to send the data, the browser will submit the form, provided there is nothing else stopping it from doing so (e.g., JavaScript)
+
+        When an element is invalid, the following things are true: 
+            > element matches the :invalid CSS pseudo-class, and sometimes other UI pseudo-classes (e.g., :out-of-range) depending on the error, which lets you apply a specific style to invalid elements
+            > If the user tries to send the data, the browser will block the form and display an error message
+    -->
+
+    <!-- Built-in form validation examples -->
+    <!-- simplest HTML5 validation feature is the required attribute, o make an input mandatory, add this attribute to the element -->
+    <!-- When this attribute is set, the element matches the :required UI pseudo-class and the form won't submit, displaying an error message on submission when the input is empty -->
+    <!-- The presence of the required attribute on any element that supports this attribute means the element matches the :required pseudoclass whether it has a value or not -->
+    <!-- For good user experience, indicate to the user when form fields are required. It isn't only good user experience, it is required by WCAG accessibility guidelines -->
+    
+    <style>
+        input:invalid {
+            border: 2px dashed red;
+        }
+
+        input:invalid:required {
+            background-image: linear-gradient(to right, pink, lightgreen);
+        }
+
+        input:valid {
+            border: 2px solid black;
+        }
+    </style>
+    <form>
+        <label for="choose">Would you prefer a banana or a cherry?</label>
+        <input id="choose" name="i_like" required>
+        <button>Submit</button>
+    </form>
+</body>
+
+</html>
