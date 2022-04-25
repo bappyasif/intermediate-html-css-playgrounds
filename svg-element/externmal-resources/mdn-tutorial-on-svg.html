@@ -291,13 +291,13 @@
             > control points essentially describe the slope of the line starting at each point
             > Bézier function then creates a smooth curve that transfers from the slope established at the beginning of the line, to the slope at the other end
      -->
-     <!-- As the curves move toward the right, the control points become spread out horizontally -->
-     <!-- As the curves move downward, they become further separated from the end points -->
-     <!-- thing to note here is that the curve starts in the direction of the first control point, and then bends so that it arrives along the direction of the second control point. -->
-     <!-- Several Bézier curves can be stringed together to create extended, smooth shapes -->
-     <!-- Often, the control point on one side of a point will be a reflection of the control point used on the other side to keep the slope constant. In this case, a shortcut version of the cubic Bézier can be used, designated by the command S (or s):  S x2 y2, x y (or) s dx2 dy2, dx dy
+    <!-- As the curves move toward the right, the control points become spread out horizontally -->
+    <!-- As the curves move downward, they become further separated from the end points -->
+    <!-- thing to note here is that the curve starts in the direction of the first control point, and then bends so that it arrives along the direction of the second control point. -->
+    <!-- Several Bézier curves can be stringed together to create extended, smooth shapes -->
+    <!-- Often, the control point on one side of a point will be a reflection of the control point used on the other side to keep the slope constant. In this case, a shortcut version of the cubic Bézier can be used, designated by the command S (or s):  S x2 y2, x y (or) s dx2 dy2, dx dy
  -->
-     
+
     <svg width="190" height="160" xmlns="http://www.w3.org/2000/svg">
 
         <path d="M 10 10 C 20 20, 40 20, 50 10" stroke="green" fill="red" />
@@ -312,7 +312,734 @@
 
     </svg>
 
+    <!-- 
+        Paths: It can be used to create lines, curves, arcs, and more
+        >> <path> element is the most powerful element in the SVG library of basic shapes
+        >> Complex shapes composed only of straight lines can be created as <polyline>s
+        >> While <polyline>s and <path>s can create similar-looking shapes, <polyline>s require a lot of small straight lines to simulate curves, and don't scale well to larger sizes
+        >> A good understanding of paths is important when drawing SVGs. While creating complex paths using an XML editor or text editor is not recommended, understanding how they work will allow to identify and repair display issues in SVGs
+        >> shape of a <path> element is defined by one parameter: d, contains a series of commands and parameters used by those commands
+        >> Each of the commands is instantiated (for example, creating a class, naming and locating it) by a specific letter, to move to (10,10) the command to use would be M 10 10
+        >> All of the commands also come in two variants. An uppercase letter specifies absolute coordinates on the page, and a lowercase letter specifies relative coordinates (e.g., move 10px up and 7px to the left from the last point)
+        >> Coordinates in the d parameter are always unitless and hence in the user coordinate system        
+    -->
 
+    <!-- 
+        Line commands: There are five line commands for <path> nodes: 
+        >> first command is the "Move To" or M, it takes two parameters, a coordinate (x) and coordinate (y) to move to, if the cursor was already somewhere on the page, no line is drawn to connect the two positions
+        >> "Move To" command appears at the beginning of paths to specify where the drawing should start
+        >> In the following example there's only a point at (10,10). Note, though, that it wouldn't show up if a path was just drawn normally
+     -->
+    <svg width="200" height="200" xmlns="http://www.w3.org/2000/svg">
+
+        <path d="M10 10" />
+
+        <!-- Points -->
+        <circle cx="10" cy="10" r="2" fill="red" />
+
+    </svg>
+    <!-- 
+        Line commands (continued): 
+        >> There are three commands that draw lines, most generic is the "Line To" command, called with L
+        >> L takes two parameters—x and y coordinates—and draws a line from the current position to a new position
+        >> There are two abbreviated forms for drawing horizontal and vertical lines
+        >> H draws a horizontal line, and V draws a vertical line. Both commands only take one parameter since they only move in one direction
+        >> We will start with a rectangle, composed of horizontal and vertical lines only and not <rect> as in one of those examples earlier
+     -->
+    <svg width="100" height="100" xmlns="http://www.w3.org/2000/svg">
+
+        <!-- <path d="M 10 10 H 90 V 90 H 10 L 10 10" fill="green" /> -->
+
+        <!-- 
+            >> We can shorten the above path declaration a little bit by using the "Close Path" command, called with Z
+            >> This command draws a straight line from the current position back to the first point of the path. It is often placed at the end of a path node, although not always. There is no difference between the uppercase and lowercase command
+        -->
+        <!-- <path d="M 10 10 H 90 V 90 H 10 Z" fill="green" stroke="black"/> -->
+
+        <!-- 
+            >> relative forms of these commands can also be used to draw the same picture
+            >> Relative commands are called by using lowercase letters, and rather than moving the cursor to an exact coordinate, they move it relative to its last position
+            >> For instance, since our box is 80×80, the <path> element could have been written as
+            >> path will move to point (10,10) and then move horizontally 80 points to the right, then 80 points down, then 80 points to the left, and then back to the start
+         -->
+        <path d="M 10 10 h 80 v 80 h -80 Z" fill="yellowgreen" stroke="black" />
+
+
+        <!-- Points -->
+        <circle cx="10" cy="10" r="2" fill="red" />
+        <circle cx="90" cy="90" r="2" fill="red" />
+        <circle cx="90" cy="10" r="2" fill="red" />
+        <circle cx="10" cy="90" r="2" fill="red" />
+
+    </svg>
+
+    <!-- 
+        Curve commands: There are three different commands that can be used to create smooth curves:
+        >> Two of those curves are Bézier curves, and the third is an "arc" or part of a circle
+        >> There are an infinite number of Bézier curves, but only two simple ones are available in <path> elements: a cubic one, called with C, and a quadratic one, called with Q
+        
+        Bezier curves: cubic curve, C, is the slightly more complex curve:
+        >> Cubic Béziers take in two control points for each point. Therefore, to create a cubic Bézier, three sets of coordinates need to be specified
+        C x1 y1, x2 y2, x y
+        (or)
+        c dx1 dy1, dx2 dy2, dx dy
+        >> last set of coordinates here (x,y) specify where the line should end, and other two are control points
+        >> (x1,y1) is the control point for the start of the curve, and (x2,y2) is the control point for the end
+        >> control points essentially describe the slope of the line starting at each point
+        >> Bézier function then creates a smooth curve that transfers from the slope established at the beginning of the line, to the slope at the other end
+        >> Several Bézier curves can be strung together to create extended, smooth shapes
+        >> Often, the control point on one side of a point will be a reflection of the control point used on the other side to keep the slope constant
+        >> In this case, a shortcut version of the cubic Bézier can be used, designated by the command S (or s)
+         S x2 y2, x y
+        (or)
+        s dx2 dy2, dx dy
+        >> S produces the same type of curve as earlier—but if it follows another S command or a C command, the first control point is assumed to be a reflection of the one used previously
+        >> If the S command doesn't follow another S or C command, then the current position of the cursor is used as the first control point
+        >> result is not the same as what the Q command would have produced with the same parameters, but is similar
+        >> An example of this syntax is shown below, and in the figure to the left the specified control points are shown in red, and the inferred control point in blue
+     -->
+    <svg width="190" height="160" xmlns="http://www.w3.org/2000/svg">
+        <path d="M 10 80 C 40 10, 65 10, 95 80 S 150 150, 180 80" stroke="yellow" fill="transparent" />
+    </svg>
+    <!-- 
+        Curve commands (continued): 
+        >> other type of Bézier curve, the quadratic curve called with Q, is actually a simpler curve than the cubic one
+        >> It requires one control point which determines the slope of the curve at both the start point and the end point
+        >> It takes two parameters: the control point and the end point of the curve
+        >> co-ordinate deltas for q are both relative to the previous point (that is, dx and dy are not relative to dx1 and dy1)
+         Q x1 y1, x y
+        (or)
+        q dx1 dy1, dx dy
+     -->
+    <svg width="190" height="160" xmlns="http://www.w3.org/2000/svg">
+        <path d="M 10 80 Q 95 10 180 80" stroke="green" fill="transparent" />
+    </svg>
+    <!-- 
+        Curve commands (continued): 
+        >> As with the cubic Bézier curve, there is a shortcut for stringing together multiple quadratic Béziers, called with T
+         T x y
+        (or)
+        t dx dy
+        >> This shortcut looks at the previous control point used and infers a new one from it
+        >> This means that after the first control point, fairly complex shapes can be made by specifying only end points
+        >> This only works if the previous command was a Q or a T command. If not, then the control point is assumed to be the same as the previous point, and only lines will be drawn
+        >> Both curves produce similar results, although the cubic one allows greater freedom in exactly what the curve looks like. Deciding which curve to use is situational and depends on the amount of symmetry the line has
+     -->
+    <svg width="190" height="160" xmlns="http://www.w3.org/2000/svg">
+        <path d="M 10 80 Q 52.5 10, 95 80 T 180 80" stroke="magenta" fill="transparent" />
+    </svg>
+
+    <!-- 
+        Arcs: are sections of circles or ellipses: 
+        >> other type of curved line that can be created using SVG is the arc, called with the A command
+        >> For a given x-radius and y-radius, there are two ellipses that can connect any two points (as long as they're within the radius of the circle)
+        >> Along either of those circles, there are two possible paths that can be taken to connect the points—so in any situation, there are four possible arcs available
+        >> Because of that, arcs require quite a few parameters:
+        A rx ry x-axis-rotation large-arc-flag sweep-flag x y
+        a rx ry x-axis-rotation large-arc-flag sweep-flag dx dy
+        >> At its start, the arc element takes in two parameters for the x-radius and y-radius
+        >> final two parameters designate the x and y coordinates to end the stroke
+        >> Together, these four values define the basic structure of the arc
+        >> third parameter describes the rotation of the arc. This is best explained with an example:
+        >> example shows a <path> element that goes diagonally across the page
+            >> At its center, two elliptical arcs have been cut out (x radius = 30, y radius = 50)
+            >> In the first one, the x-axis-rotation has been left at 0, so the ellipse that the arc travels around (shown in gray - in depiction which lies below red lines) is oriented straight up and down
+            >> For the second arc, though, the x-axis-rotation is set to -45 degrees. This rotates the ellipse so that it is aligned with its minor axis along the path direction, as shown by the second ellipse in the example image
+     -->
+    <svg width="320" height="320" xmlns="http://www.w3.org/2000/svg">
+        <path d="M 10 315
+                 L 110 215
+                 A 30 50 0 0 1 162.55 162.45
+                 L 172.55 152.45
+                 A 30 50 -45 0 1 215.1 109.9
+                 L 315 10" stroke="red" fill="green" stroke-width="2" fill-opacity="0.5" />
+    </svg>
+    <!-- 
+        Arc (continued): 
+        >> For the unrotated ellipse in the image above, there are only two different arcs and not four to choose from because the line drawn from the start and end of the arc goes through the center of the ellipse
+        >> In a slightly modified example the two ellipses that form the four different arcs can be seen:
+        >> Notice that each of the blue ellipses are formed by two arcs, depending on traveling clockwise or counter-clockwise
+            >> Each ellipse has one short arc and one long arc
+            >> two ellipses are just mirror images of each other
+            >> They are flipped along the line formed from the start→end points
+            >> If the start→end points are farther than the ellipse's x and y radius can reach, the ellipse's radii will be minimally expanded so it could reach the start→end points
+     -->
+    <svg xmlns="http://www.w3.org/2000/svg" width="320" height="320">
+        <path d="M 10 315
+                 L 110 215
+                 A 36 60 0 0 1 150.71 170.29
+                 L 172.55 152.45
+                 A 30 50 -45 0 1 215.1 109.9
+                 L 315 10" stroke="red" fill="green" stroke-width="2" fill-opacity="0.5" />
+        <circle cx="150.71" cy="170.29" r="2" fill="red" />
+        <circle cx="110" cy="215" r="2" fill="red" />
+        <ellipse cx="144.931" cy="229.512" rx="36" ry="60" fill="silver" stroke="blue" fill-opacity="0.2" />
+        <ellipse cx="115.779" cy="155.778" rx="36" ry="60" fill="silver" stroke="blue" fill-opacity="0.2" />
+    </svg>
+    <!-- 
+          Arcs (continued): 
+          >> four different paths mentioned above are determined by the next two parameter flags
+          >> As mentioned earlier, there are still two possible ellipses for the path to travel around and two different possible paths on both ellipses, giving four possible paths
+          >> first parameter is the large-arc-flag. It determines if the arc should be greater than or less than 180 degrees; in the end, this flag determines which direction the arc will travel around a given circle
+          >> second parameter is the sweep-flag. It determines if the arc should begin moving at positive angles or negative ones, which essentially picks which of the two circles will be traveled around
+          >> example below shows all four possible combinations, along with the two circles for each case
+       -->
+    <svg width="325" height="325" xmlns="http://www.w3.org/2000/svg">
+        <path d="M 80 80
+                 A 45 45, 0, 0, 0, 125 125
+                 L 125 80 Z" fill="green" />
+        <path d="M 230 80
+                 A 45 45, 0, 1, 0, 275 125
+                 L 275 80 Z" fill="red" />
+        <path d="M 80 230
+                 A 45 45, 0, 0, 1, 125 275
+                 L 125 230 Z" fill="purple" />
+        <path d="M 230 230
+                 A 45 45, 0, 1, 1, 275 275
+                 L 275 230 Z" fill="blue" />
+    </svg>
+
+    <!-- 
+        Fills and Strokes: 
+
+        Fill and Stroke Attributes:
+
+        Painting: 
+        >> Basic coloring can be done by setting two attributes on the node: fill and stroke
+        >> Using fill sets the color inside the object and stroke sets the color of the line drawn around the object
+        >> In addition, you can specify the opacity of either the fill or stroke separately in SVG. These are controlled by the fill-opacity and stroke-opacity attributes
+     -->
+    <svg xmlns="http://www.w3.org/2000/svg">
+        <rect x="10" y="10" width="100" height="100" stroke="blue" fill="purple" fill-opacity="0.5"
+            stroke-opacity="0.8" />
+    </svg>
+    <!-- 
+        Stroke:
+        >> In addition to its color properties, there are a few other attributes available to control the way a stroke is drawn on a line
+        >> stroke-width property defines the width of this stroke
+        >> Strokes are drawn centered around the path
+        >> second attribute affecting strokes is the stroke-linecap property, This controls the shape of the ends of lines
+        There are three possible values for stroke-linecap:
+            >> 'butt' closes the line off with a straight edge that's normal (at 90 degrees) to the direction of the stroke and crosses its end
+            >> 'square' has essentially the same appearance, but stretches the stroke slightly beyond the actual path. The distance that the stroke goes beyond the path is half the stroke-width
+            >> 'round' produces a rounded effect on the end of the stroke. The radius of this curve is also controlled by the stroke-width
+     -->
+    <?xml version="1.0" standalone="no"?>
+    <svg width="160" height="140" xmlns="http://www.w3.org/2000/svg" version="1.1">
+        <line x1="40" x2="120" y1="20" y2="20" stroke="yellow" stroke-width="20" stroke-linecap="butt" />
+        <line x1="40" x2="120" y1="60" y2="60" stroke="yellow" stroke-width="20" stroke-linecap="square" />
+        <line x1="40" x2="120" y1="100" y2="100" stroke="yellow" stroke-width="20" stroke-linecap="round" />
+    </svg>
+    <!-- 
+        >> Use stroke-linejoin to control how the joint between two line segments is drawn 
+        >> Each of these polylines has two segments
+        >> joint where the two meet is controlled by the stroke-linejoin attribute
+        >> There are three possible values for this attribute:
+            >> 'miter' extends the line slightly beyond its normal width to create a square corner where only one angle is used
+            >> 'round' creates a rounded line segment
+            >> 'bevel' creates a new angle to aid in the transition between the two segments
+    -->
+    <?xml version="1.0" standalone="no"?>
+    <svg width="160" height="280" xmlns="http://www.w3.org/2000/svg" version="1.1">
+        <polyline points="40 60 80 20 120 60" stroke="red" stroke-width="20" stroke-linecap="butt" fill="none"
+            stroke-linejoin="miter" />
+
+        <polyline points="40 140 80 100 120 140" stroke="red" stroke-width="20" stroke-linecap="round" fill="none"
+            stroke-linejoin="round" />
+
+        <polyline points="40 220 80 180 120 220" stroke="red" stroke-width="20" stroke-linecap="square" fill="none"
+            stroke-linejoin="bevel" />
+    </svg>
+
+    <!-- 
+        >> Finally, you can also use dashed line types on a stroke by specifying the stroke-dasharray attribute
+        >> Unlike <path> elements, these numbers must be comma-separated (whitespace is ignored)
+        >> first number specifies a distance for the filled area
+        >> second number specifies a distance for the unfilled area
+        >> So in this example, second path fills 5 pixel units, with 5 blank units until the next dash of 5 units
+        >> You can specify more numbers if you would like a more complicated dash pattern
+        >> first example specifies three numbers, in which case the renderer loops the numbers twice to create an even pattern
+        >> So first path renders 5 filled, 10 empty, 5 filled, and then loops back to create 5 empty, 10 filled, 5 empty, pattern then repeats
+     -->
+    <?xml version="1.0" standalone="no"?>
+    <svg width="200" height="150" xmlns="http://www.w3.org/2000/svg" version="1.1">
+        <path d="M 10 75 Q 50 10 100 75 T 190 75" stroke="green" stroke-linecap="round" stroke-dasharray="5,10,5"
+            fill="none" />
+        <path d="M 10 75 L 190 75" stroke="red" stroke-linecap="round" stroke-width="1" stroke-dasharray="5,5"
+            fill="none" />
+    </svg>
+
+    <!-- 
+        Using CSS
+        >> In addition to setting attributes on objects, you can also use CSS to style fills and strokes
+        >> Not all attributes can be set via CSS. Attributes that deal with painting and filling are usually available, so fill, stroke, stroke-dasharray, etc... can all be set this way
+        >> Attributes like width, height, or <path> commands cannot be set through CSS
+        >> properties can be modifierd wqith css but attribute is not
+        >> CSS can be inserted inline with the element via the style attribute
+        >> Or it can be moved to a special style section that you include
+        >> You can also use things like the :hover pseudo class to create rollover effects
+        >> You can also specify an external stylesheet for your CSS rules through normal XML-stylesheet syntax
+            <?xml-stylesheet type="text/css" href="style.css"?>
+     -->
+
+
+    <!-- 
+         Gradients in SVG: 
+         >> There are two types of gradients: linear and radial
+         >> You must give the gradient an id attribute; otherwise it can't be referenced by other elements inside the file
+         >> Gradients are defined in a defs section as opposed to on a shape itself to promote reusability
+
+         Linear Gradient:
+         >> Linear gradients change along a straight line
+         >> To insert one, you create a <linearGradient> node inside the definitions section of your SVG file
+         >> Inside the linear gradient are several <stop> nodes. These nodes tell the gradient what color it should be at certain positions by specifying an offset attribute for the position, and a stop-color attribute
+         >> This can be assigned directly or through CSS
+         >> You can insert as many stop colors as you like to create a blend that's as beautiful or hideous as you need, but the offsets should always increase from 0% (or 0 if you want to drop the % sign) to 100% (or 1).
+         >> you can specify a stop-opacity attribute to set the opacity at that position
+         >> To use a gradient, we have to reference it from an object's fill or stroke attributes
+         >> we have to reference it from an object's fill or stroke attributes. 
+         >> This is done the same way you reference elements in CSS, using a url
+         >> To attach it, set the fill to url(#Gradient), and voila! Our object is now multicolored. You can do the same with stroke
+      -->
+    <svg width="120" height="240" version="1.1" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+            <linearGradient id="Gradient1">
+                <stop class="stop1" offset="0%" />
+                <stop class="stop2" offset="50%" />
+                <stop class="stop3" offset="100%" />
+            </linearGradient>
+            <linearGradient id="Gradient2" x1="0" x2="0" y1="0" y2="1">
+                <stop offset="0%" stop-color="red" />
+                <stop offset="50%" stop-color="green" stop-opacity="0" />
+                <stop offset="100%" stop-color="blue" />
+            </linearGradient>
+            <!-- 
+                You can also use the xlink:href attribute on gradients too. When it is used, attributes and stops from one gradient can be included on another, you wouldn't have to recreate all the stops in Gradient2
+                 <linearGradient id="Gradient1">
+                    <stop id="stop1" offset="0%"/>
+                    <stop id="stop2" offset="50%"/>
+                    <stop id="stop3" offset="100%"/>
+                </linearGradient>
+                <linearGradient id="Gradient2" x1="0" x2="0" y1="0" y2="1"
+                    xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#Gradient1"/>
+             -->
+
+            <!-- <style type="text/css"><![CDATA[
+              #rect1 { fill: url(#Gradient1); }
+              .stop1 { stop-color: red; }
+              .stop2 { stop-color: black; stop-opacity: 0; }
+              .stop3 { stop-color: blue; }
+            ]]></style> -->
+        </defs>
+
+        <rect id="rect1" x="10" y="10" rx="15" ry="15" width="100" height="100" />
+        <rect x="10" y="120" rx="15" ry="15" width="100" height="100" fill="url(#Gradient2)" />
+
+    </svg>
+
+    <!-- 
+        Linear gradient (continued): 
+        >> <linearGradient> element also takes several other attributes, which specify the size and appearance of the gradient
+        >> orientation of the gradient is controlled by two points, designated by the attributes x1, x2, y1, and y2
+        >> These attributes define a line along which the gradient travels
+        >> gradient defaults to a horizontal orientation, but it can be rotated by changing these
+
+     -->
+
+    <!-- 
+         Radial Gradient: Radial gradients are similar to linear ones but draw a gradient that radiates out from a point
+         >> to create one you add a <radialGradient> element to the definitions section of your document
+         >> stops used here are the same as before, but now the object will be red in the center, and in all directions gradually change to blue at the edge
+         >> radial gradient is again defined by two points, which determine where its edges are
+      -->
+    <?xml version="1.0" standalone="no"?>
+    <svg width="120" height="240" version="1.1" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+            <radialGradient id="RadialGradient1">
+                <stop offset="0%" stop-color="red" />
+                <stop offset="100%" stop-color="blue" />
+            </radialGradient>
+            <radialGradient id="RadialGradient2" cx="0.25" cy="0.25" r="0.25">
+                <stop offset="0%" stop-color="red" />
+                <stop offset="100%" stop-color="blue" />
+            </radialGradient>
+        </defs>
+
+        <rect x="10" y="10" rx="15" ry="15" width="100" height="100" fill="url(#RadialGradient1)" />
+        <rect x="10" y="120" rx="15" ry="15" width="100" height="100" fill="url(#RadialGradient2)" />
+
+    </svg>
+
+    <!-- 
+        Radial gradient (continued): 
+         >> first of these defines a circle around which the gradient ends
+         >> It requires a center point, designated by the cx and cy attributes, and a radius, r
+         >> Setting these three attributes will allow you to move the gradient around and change its size, as shown in the second rect
+         >> second point is called the focal point and is defined by the fx and fy attributes
+         >> While the first point described where the edges of the gradient were, the focal point describes where its middle is
+         >> If the focal point is moved outside the circle described earlier, it's impossible for the gradient to be rendered correctly, so the spot will be assumed to be within the edge of the circle
+         >> If the focal point isn't given at all, it's assumed to be at the same place as the center point
+         >> Both linear and radial gradients also take a few other attributes to describe transformations they may undergo
+     -->
+    <?xml version="1.0" standalone="no"?>
+
+    <svg width="120" height="120" version="1.1" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+            <radialGradient id="Gradient" cx="0.5" cy="0.5" r="0.5" fx="0.25" fy="0.25">
+                <stop offset="0%" stop-color="red" />
+                <stop offset="100%" stop-color="blue" />
+            </radialGradient>
+        </defs>
+
+        <rect x="10" y="10" rx="15" ry="15" width="100" height="100" fill="url(#Gradient)" stroke="black"
+            stroke-width="2" />
+
+        <circle cx="60" cy="60" r="50" fill="transparent" stroke="white" stroke-width="2" />
+        <circle cx="35" cy="35" r="2" fill="white" stroke="white" />
+        <circle cx="60" cy="60" r="2" fill="white" stroke="white" />
+        <text x="38" y="40" fill="white" font-family="sans-serif" font-size="10pt">(fx,fy)</text>
+        <text x="63" y="63" fill="white" font-family="sans-serif" font-size="10pt">(cx,cy)</text>
+
+    </svg>
+
+    <!-- 
+        spreadMethod:
+        >> This attribute controls what happens when the gradient reaches its end, but the object isn't filled yet
+        >> It can take on one of three values, "pad", "reflect", or "repeat"
+        >> "Pad" is when the gradient reaches its end, the final offset color is used to fill the rest of the object
+        >> "reflect" causes the gradient to continue on, but reflected in reverse, starting with the color offset at 100% and moving back to the offset at 0%, and then back up again
+        >> "Repeat" also lets the gradient continue, but instead of going backwards, it just jumps back to the beginning and runs again
+     -->
+    <?xml version="1.0" standalone="no"?>
+
+    <svg width="220" height="220" version="1.1" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+            <radialGradient id="GradientPad" cx="0.5" cy="0.5" r="0.4" fx="0.75" fy="0.75" spreadMethod="pad">
+                <stop offset="0%" stop-color="red" />
+                <stop offset="100%" stop-color="blue" />
+            </radialGradient>
+            <radialGradient id="GradientRepeat" cx="0.5" cy="0.5" r="0.4" fx="0.75" fy="0.75" spreadMethod="repeat">
+                <stop offset="0%" stop-color="red" />
+                <stop offset="100%" stop-color="blue" />
+            </radialGradient>
+            <radialGradient id="GradientReflect" cx="0.5" cy="0.5" r="0.4" fx="0.75" fy="0.75" spreadMethod="reflect">
+                <stop offset="0%" stop-color="red" />
+                <stop offset="100%" stop-color="blue" />
+            </radialGradient>
+        </defs>
+
+        <rect x="10" y="10" rx="15" ry="15" width="100" height="100" fill="url(#GradientPad)" />
+        <rect x="10" y="120" rx="15" ry="15" width="100" height="100" fill="url(#GradientRepeat)" />
+        <rect x="120" y="120" rx="15" ry="15" width="100" height="100" fill="url(#GradientReflect)" />
+
+        <text x="15" y="30" fill="white" font-family="sans-serif" font-size="12pt">Pad</text>
+        <text x="15" y="140" fill="white" font-family="sans-serif" font-size="12pt">Repeat</text>
+        <text x="125" y="140" fill="white" font-family="sans-serif" font-size="12pt">Reflect</text>
+
+    </svg>
+
+    <!-- 
+        Spread method (continued): 
+        >> Both gradients also have an attribute named gradientUnits, which describes the unit system you're going to use when you describe the size or orientation of the gradient\
+        >> There are two possible values to use here: userSpaceOnUse or objectBoundingBox
+        >> objectBoundingBox is the default,It essentially scales the gradient to the size of your object, so you only have to specify coordinates in values from zero to one, and they're scaled to the size of your object automatically for you
+        >> userSpaceOnUse essentially takes in absolute units. So you have to know where your object is, and place the gradient at the same place
+     -->
+
+
+    <!-- 
+         Patterns:
+         >> Like gradients, the <pattern> element should be put in the <defs> section of your SVG file
+         >> Inside the <pattern> element, you can include any of the other basic shapes you've included before, and each of them can be styled using any of the styles you've learned before, including gradients and opacity
+         >> confusing thing about patterns is defining a unit system and their size
+         >> In this example, we've defined a width and height attribute on the pattern element to describe how far the pattern should go before it begins repeating itself again
+         >> There are also x and y attributes available if you want to offset the start point of this rectangle somewhere within your drawing
+         >> patterns also have an attribute, patternUnits, which specifies the units that these attributes will take
+         >> Since, in this case, we wanted the pattern to repeat 4 times horizontally and vertically, the height and width are set to 0.25
+         >> This means the pattern's width and height is only 0.25 of the total box size
+         >> Unlike gradients, patterns have a second attribute, patternContentUnits, which describes the units system used inside the pattern element, on the basic shapes themselves
+         >> This attribute defaults to "userSpaceOnUse", the opposite of the patternUnits attribute
+         >> What this means is that unless you specify one or both of these attributes (patternContentUnits and patternUnits), the shapes you draw inside your pattern are being drawn in a different coordinate system than the pattern element is using, which can make things a bit confusing when you're writing this by hand
+         >> To make this work in this example, we had to consider the size of our box (200 pixels) and the fact that we wanted the pattern to repeat itself 4 times horizontally and vertically
+         >> This means that each pattern unit was a 50×50 square. The two rects and the circle inside the pattern were then sized to fit in a 50×50 box
+         >> Anything we had drawn outside that box wouldn't have been shown
+         >> pattern also had to be offset by 10 pixels so that it would start in the upper-left corner of our box, so the x and y attributes of the pattern had to be adjusted to 10÷200 = 0.05
+         >> caveat here is that if the object changes size, the pattern itself will scale to fit it, but the objects inside will not
+         >> So while we would still have 4 repeating units inside the pattern, the objects composing that pattern would remain the same size, and you end up with large areas of nothing in between them
+      -->
+    <svg width="200" height="200" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+            <linearGradient id="Gradient1">
+                <stop offset="5%" stop-color="white" />
+                <stop offset="95%" stop-color="blue" />
+            </linearGradient>
+            <linearGradient id="Gradient2" x1="0" x2="0" y1="0" y2="1">
+                <stop offset="5%" stop-color="red" />
+                <stop offset="95%" stop-color="orange" />
+            </linearGradient>
+
+            <!-- <pattern id="Pattern" x="0" y="0" width=".25" height=".25">
+                <rect x="0" y="0" width="50" height="50" fill="skyblue" />
+                <rect x="0" y="0" width="25" height="25" fill="url(#Gradient2)" />
+                <circle cx="25" cy="25" r="20" fill="url(#Gradient1)" fill-opacity="0.5" />
+            </pattern> -->
+            <!-- 
+                By changing the patternContentUnits attribute, we can put all the elements into the same unit system:
+             -->
+            <!-- <pattern id="Pattern" width=".25" height=".25" patternContentUnits="objectBoundingBox">
+                <rect x="0" y="0" width=".25" height=".25" fill="skyblue" />
+                <rect x="0" y="0" width=".125" height=".125" fill="url(#Gradient2)" />
+                <circle cx=".125" cy=".125" r=".1" fill="url(#Gradient1)" fill-opacity="0.5" />
+            </pattern> -->
+            <!-- 
+                >> Now, because the pattern content is in the same unit system as the pattern, we don't have to offset the box so that the pattern starts in the correct place, and if the object size was changed to a larger one, the pattern would automatically scale so that it had the same number of objects and repeats inside it
+                >> This contrasts with the "userSpaceOnUse" system, where if the object changes the size, the pattern would stay the same and just repeat itself more times to fill the box
+             -->
+
+            <!-- 
+                 >> Patterns usually have a set size and repeat themselves independently of what an object's shape is
+                 >> To create something like this, both the pattern and its contents must be drawn in the current userSpace, so they don't change shape if the object does:
+              -->
+            <pattern id="Pattern" x="10" y="10" width="50" height="50" patternUnits="userSpaceOnUse">
+                <rect x="0" y="0" width="50" height="50" fill="skyblue" />
+                <rect x="0" y="0" width="25" height="25" fill="url(#Gradient2)" />
+                <circle cx="25" cy="25" r="20" fill="url(#Gradient1)" fill-opacity="0.5" />
+            </pattern>
+
+        </defs>
+
+        <rect fill="url(#Pattern)" stroke="black" width="200" height="200" />
+    </svg>
+
+
+
+    <!-- 
+        Texts: 
+        >> When talking about text in SVG we have to differentiate two almost completely separate topics
+        >> one is the inclusion and display of text in an image, and the other are SVG fonts
+        >> we will focus completely on the first part: Bringing text into an SVG image
+     -->
+    <!-- 
+         Basics: 
+         >> text element can be used to put arbitrary text in SVG documents: <text x="10" y="10">Hello World!</text>
+         >> x and y attributes determine, where in the viewport the text will appear
+         >> attribute text-anchor, which can have the values "start", "middle", "end" or "inherit", decides in which direction the text flows from this point
+         >> attribute dominant-baseline decides the vertical alignment
+         >> Like with the shape elements text can be colorized with the fill attribute and given a stroke with the stroke attribute
+         >> Both may also refer to gradients or patterns, which makes simple coloring text in SVG very powerful
+
+         Setting font properties: 
+         >> An essential part of a text is the font in which it is displayed
+         >> SVG offers a set of attributes, many similar to their CSS counterparts, to enable font selection
+         >> Each of the following properties can be set as an attribute or via a CSS declaration: font-family, font-style, font-weight, font-variant, font-stretch, font-size, font-size-adjust, kerning, letter-spacing, word-spacing and text-decoratio
+
+         Other text related elements:
+
+         tspan: 
+         >> This element is used to mark up sub-portions of a larger text
+         >> It must be a child of a text element or another tspan element
+         >> A typical use case is to paint one word of a sentence bold red
+      -->
+    <svg width="350" height="60" xmlns="http://www.w3.org/2000/svg">
+        <text style="font: 28px Verdana, Helvetica, Arial, sans-serif; dominant-baseline: hanging;">
+            This is <tspan font-weight="bold" fill="red">bold and red</tspan>
+        </text>
+    </svg>
+    <!-- 
+        tspan (continued): 
+        >> x: 
+            >> Set a new absolute x coordinate for the containing text
+            >> This overwrites the default current text position
+            >> attribute may also contain a list of numbers, that are one by one applied to the single characters of the tspan element
+        >> dx:
+            >> Start drawing the text with a horizontal offset dx from the default current position
+            >> Here, too, you may provide a list of values that are applied to consecutive characters, hence piling up the offset over time
+        >> Likewise, there are y and dy for vertical displacement
+        >> rotate:
+            >> Rotate all characters by this degree
+            >> A list of numbers makes each character rotate to its respective value, with remaining characters rotating according to the last value
+        >> textLength: 
+            >> This is a more obscure attribute giving the calculated length of the string
+            >> It is meant to allow the rendering engine to fine-tune the positions of the glyphs when its own measured text length doesn't meet the one provided here
+     -->
+
+    <!-- 
+         textPath
+         >> This element fetches via its xlink:href attribute an arbitrary path and aligns the characters, that it encircles, along this path
+      -->
+    <svg width="200" height="100" xmlns="http://www.w3.org/2000/svg">
+        <path id="my_path" d="M 20,20 C 80,60 100,40 120,20" fill="green" stroke="red" />
+        <text style="font: 28px Verdana, Helvetica, Arial, sans-serif; dominant-baseline: hanging; color: green;">
+            <textPath xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#my_path" fill="red">
+                A curve.
+            </textPath>
+        </text>
+    </svg>
+
+
+    <!-- 
+        Basic transformations:
+        >> let's formally introduce the <g> element
+            >> With this helper, you can assign properties to a complete set of elements. Actually, that's its only purpose
+        >> All following transformations are summed up in an element's transform attribute
+            >> Transformations can be chained by concatenating them, separated by whitespace
+            >> e.g. Translation, Rotation, Mutiple Transformations, Skewing, Scaling, Complex transformation with matrix(), effects on coordinate sysntems, embedding svg in svg
+     -->
+    <svg width="30" height="10">
+        <g fill="red">
+            <rect x="0" y="0" width="10" height="10" />
+            <rect x="20" y="0" width="10" height="10" />
+        </g>
+    </svg>
+
+    <!-- 
+        Translation:
+        >> It may be necessary to move an element around, even though you can position it with the according attributes
+        >> For this purpose, the translate() transformation stands ready
+        >> example will render a rectangle, translated to the point (30,40) instead of (0,0)
+            >> If the second value is not given, it is assumed to be 0
+     -->
+    <svg width="40" height="50" style="background-color:#bff;">
+        <rect x="0" y="0" width="10" height="10" transform="translate(30,40)" />
+    </svg>
+
+    <!-- 
+        Rotation: 
+        >> Rotating an element is quite a common task
+        >> Use the rotate() transformation for this
+        >> example shows a square that is rotated by 45 degrees
+        >> value for rotate() is given in degrees
+     -->
+    <svg width="31" height="31">
+        <rect x="12" y="-10" width="20" height="20" transform="rotate(45)" fill='red' />
+    </svg>
+
+    <!-- 
+        Mutiple transformations:
+        >> Transformations can be concatenated easily just by separating them with spaces
+        >> For example, translate() and rotate() are common used transformations
+        >> This example shows again the small square shown above that this time is also rotated by 45 degrees
+     -->
+    <svg width="40" height="50" style="background-color:#bff;">
+        <rect x="0" y="0" width="10" height="10" transform="translate(30,40) rotate(45)" stroke="green" />
+    </svg>
+
+    <!-- 
+        Skewing:
+        >> To make a rhombus out of our rectangle, the skewX() and skewY() transformations are available
+        >> Each one takes an angle that determines how far the element will be skewed
+
+        Scaling:
+        >> scale() changes the size of an element
+        >> It takes two numbers, the first being the x scale factor and the second being the y scale factor
+        >> factors are taken as the ratio of the transformed dimension to the original
+        >> For example, 0.5 shrinks by 50%. If the second number is omitted, it is assumed to be equal to the first
+
+        Complex transformations with matrix():
+        >> All the above transformations can be expressed by a 2x3 transformation matrix
+        >> To combine several transformations, one can set the resulting matrix directly with the matrix(a, b, c, d, e, f) transformation which maps coordinates from a previous coordinate system into a new coordinate system
+
+        Effect on Coordinate Systems: 
+        >> When using transformations you establish a new coordinate system inside the element the transformations apply to
+        >> That means, the units you specify for the element and its children might not follow the 1:1 pixel mapping, but are also distorted, skewed, translated and scaled according to the transformation
+        >> resulting rectangular in the above example will be 100x100px
+     -->
+    <svg width="100" height="100">
+        <g transform="scale(2)">
+            <rect width="50" height="50" fill="red" />
+        </g>
+    </svg>
+
+    <!-- 
+        Embedding SVG in SVG:
+        >> In contrast to HTML, SVG allows you to embed other svg elements seamlessly
+        >> This way you can also create new coordinate systems by utilizing the viewBox, width and height of the inner svg element
+        >> This example has basically the same effect as the one above, namely that the rect will be twice as large as specified
+     -->
+    <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100" height="100">
+        <svg width="100" height="100" viewBox="0 0 50 50">
+            <rect width="50" height="50" stroke="red" />
+        </svg>
+    </svg>
+
+
+    <!-- 
+        Clipping and masking: 
+        >> Clipping refers to removing parts of elements defined by other parts
+        >> Masking on the other hand allows soft edges by taking transparency and grey values of the mask into account
+     -->
+    <!-- 
+         Creating clips:
+         >> We create the above mentioned semicircle based on a circle element
+         >> this example:
+         >> Centered at (100,100) a circle with radius 100 is painted
+         >> attribute clip-path references a <clipPath> element with a single rect element
+         >> This rectangular on its own would paint the upper half of the canvas black
+         >> Note, that the clipPath element is usually placed in a defs section
+         >> rect will not be painted, however. Instead its pixel data will be used to determine, which pixels of the circle "make it" to the final rendering
+         >> Since the rectangle covers only the upper half of the circle, the lower half of the circle will vanish
+         >> For the clipping, every path inside the clipPath is inspected and evaluated together with its stroke properties and transformation
+         >> Then every part of the target lying in a transparent area of the resulting clipPath's content will not be rendered
+         >> Color, opacity and such have no effect as long as they don't let parts vanish completely
+      -->
+    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <defs>
+            <clipPath id="cut-off-bottom">
+                <rect x="0" y="0" width="200" height="100" />
+            </clipPath>
+        </defs>
+
+        <circle cx="100" cy="100" r="100" clip-path="url(#cut-off-bottom)" fill="yellow" />
+    </svg>
+
+
+    <!-- 
+        Masking:
+        >> effect of masking is most impressively presented with a gradient
+        >> If you want an element to fade out, you can achieve this effect quite quickly with masks
+        >> You see a green-filled rect at the lowest layer and on top a red-filled rect
+        >> latter has the mask attribute pointing to the mask element
+        >> content of the mask is a single rect element, that is filled with a black-to-white gradient
+        >> As a result the pixels of the red rectangle use the luminance value of the mask content as the alpha value (the transparency), and we see a green-to-red gradient as a result
+     -->
+    <svg width="200" height="200" version="1.1" xmlns="http://www.w3.org/2000/svg"
+        xmlns:xlink="http://www.w3.org/1999/xlink">
+        <defs>
+            <linearGradient id="Gradient2">
+                <stop offset="0" stop-color="black" />
+                <stop offset="1" stop-color="white" />
+            </linearGradient>
+            <mask id="Mask">
+                <rect x="0" y="0" width="200" height="200" fill="url(#Gradient2)" stroke="magenta" />
+            </mask>
+        </defs>
+
+        <rect x="0" y="0" width="200" height="200" fill="green" />
+        <rect x="0" y="0" width="200" height="200" fill="red" mask="url(#Mask)" />
+    </svg>
+
+
+    <!-- 
+        Tranceparency with opacity: 
+        >> There is a simple possibility to set the transparency for a whole element
+        >> It's the opacity attribute: <rect x="0" y="0" width="100" height="100" opacity=".5" />
+        >> For the fill and stroke there are two separate attributes, fill-opacity and stroke-opacity, that control each of those property opacities separately
+        >> Note, that the stroke will be painted on top of the filling
+        >> Hence, if you set a stroke opacity on an element, that also has a fill, the fill will shine through on half of the stroke, while on the other half the background will appeaR
+        >> You see in this example the red circle on blue background. The yellow stroke is set to 50% opacity, which leads effectively to a double-color stroke
+     -->
+    <svg width="200" height="200" version="1.1" xmlns="http://www.w3.org/2000/svg"
+        xmlns:xlink="http://www.w3.org/1999/xlink">
+        <rect x="0" y="0" width="200" height="200" fill="blue" />
+        <circle cx="100" cy="100" r="50" stroke="yellow" stroke-width="40" stroke-opacity=".5" fill="red" />
+    </svg>
+    
+    <!-- 
+        Using well known css techniques:
+        >> One of the most powerful tools in a web developer's toolbox is display: none
+        >> It is therefore not a surprise that it was decided to take this CSS property into SVG as well, together with visibility and clip as defined by CSS 2
+        >> For reverting a previously set display: none it is important to know, that the initial value for all SVG elements is inline
+     -->
 </body>
 
 </html>
