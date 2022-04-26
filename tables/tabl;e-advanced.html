@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML Table Advanced article from mdn</title>
+</head>
+
+<body>
+    <!-- 
+        Adding a caption to your table with <caption>:
+        >> You can give your table a caption by putting it inside a <caption> element and nesting that inside the <table> element
+        >> You should put it just below the opening <table> tag
+        >> caption is meant to contain a description of the table contents
+        >> This is useful for all readers wishing to get a quick idea of whether the table is useful to them as they scan the page, but particularly for blind users
+        >> A caption is placed directly beneath the <table> tag
+        >> summary attribute can also be used on the <table> element to provide a description — this is also read out by screenreaders
+        >> <cption> element is recommended, as summary is deprecated by the HTML5 spec, and can't be read by sighted users (it doesn't appear on the page.)
+     -->
+    <style>
+        html {
+            font-family: sans-serif;
+        }
+
+        table {
+            border-collapse: collapse;
+            border: 2px solid rgb(200, 200, 200);
+            letter-spacing: 1px;
+            font-size: 0.8rem;
+        }
+
+        td,
+        th {
+            border: 1px solid rgb(190, 190, 190);
+            padding: 10px 20px;
+        }
+
+        td {
+            text-align: center;
+        }
+
+        caption {
+            padding: 10px;
+        }
+    </style>
+    <table>
+        <colgroup>
+            <col span="2">
+            <col style="background-color: #97DB9A;">
+            <col style="width: 42px;">
+            <col style="background-color: #97DB9A;">
+            <col style="background-color: green; border: red solid 4px;">
+            <col style="width: 42px;">
+        </colgroup>
+        <tr>
+            <td>&nbsp;</td>
+            <th>Mon</th>
+            <th>Tues</th>
+            <th>Wed</th>
+            <th>Thurs</th>
+            <th>Fri</th>
+            <th>Sat</th>
+            <th>Sun</th>
+        </tr>
+        <tr>
+            <th>1st period</th>
+            <td>English</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>German</td>
+            <td>Dutch</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <th>2nd period</th>
+            <td>English</td>
+            <td>English</td>
+            <td>&nbsp;</td>
+            <td>German</td>
+            <td>Dutch</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <th>3rd period</th>
+            <td>&nbsp;</td>
+            <td>German</td>
+            <td>&nbsp;</td>
+            <td>German</td>
+            <td>Dutch</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <th>4th period</th>
+            <td>&nbsp;</td>
+            <td>English</td>
+            <td>&nbsp;</td>
+            <td>English</td>
+            <td>Dutch</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+    </table>
+</body>
+
+</html>
