@@ -1033,13 +1033,222 @@
         <rect x="0" y="0" width="200" height="200" fill="blue" />
         <circle cx="100" cy="100" r="50" stroke="yellow" stroke-width="40" stroke-opacity=".5" fill="red" />
     </svg>
-    
+
     <!-- 
         Using well known css techniques:
         >> One of the most powerful tools in a web developer's toolbox is display: none
         >> It is therefore not a surprise that it was decided to take this CSS property into SVG as well, together with visibility and clip as defined by CSS 2
         >> For reverting a previously set display: none it is important to know, that the initial value for all SVG elements is inline
      -->
+
+    <!-- 
+         Other content in SVG:
+         >> Apart from graphic primitives like rectangles and circles, SVG offers a set of elements to embed other types of content in images as well
+
+         Embedding raster images:
+         >> Much like the img element in HTML SVG has an image element to serve the same purpose
+         >> You can use it to embed arbitrary raster (and vector) images
+         >> specification requests applications to support at least PNG, JPEG and SVG format files
+         >> embedded picture becomes a normal SVG element. This means, that you can use clips, masks, filters, rotations and all other tools of SVG on the content
+      -->
+    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="200"
+        height="200">
+        <image x="90" y="-65" width="128" height="146" transform="rotate(45)"
+            xlink:href="https://developer.mozilla.org/en-US/docs/Web/SVG/Element/image/mdn_logo_only_color.png" />
+    </svg>
+
+    <!-- 
+        Embedding arbitary XML: 
+        >> Since SVG is an XML application, you can of course always embed arbitrary XML anywhere in an SVG document
+        >> Actually, in a conforming viewer it will react in no way at all, the data will be omitted
+        >> Therefore the specification adds the <foreignObject> element to SVG. Its sole purpose is to be a container for other markup and a carrier for SVG styling attributes (most prominently width and height to define the space the object will take)
+        >> foreignObject element is a good way to embed XHTML in SVG
+        >> If you have longer texts, the HTML layout is more suitable and comfortable than the SVG text element
+        >> Another often cited use case is the embedding of formulas with MathML
+        >> Please keep in mind, that the content of the foreignObject must be processable by the viewer.
+        >> A standalone SVG viewer is unlikely to be able to render HTML or MathML
+        >> Since the foreignObject is an SVG element, you can, like in the case of image, use any SVG goodness with it, which then will be applied to its content
+     -->
+
+
+    <!-- 
+         Filter effects: Filters are SVG's mechanism to create sophisticated effects:
+         >> A basic example is to add a blur effect to SVG content. While basic blurs can be achieved with the help of gradients, the blur filter is needed to do anything beyond
+         >> Filters are defined by <filter> element, which should be put in the <defs> section of your SVG file
+         >> Between the filter tags, goes a list of primitives, basic operations that build on top of the previous operations (like blurring, adding a lighting effect, etc)
+         >> To apply your created filter on a graphic element, you set the filter attribute
+      -->
+    <svg width="250" viewBox="0 0 200 85" xmlns="http://www.w3.org/2000/svg" version="1.1">
+        <defs>
+            <!-- Filter declaration -->
+            <filter id="MyFilter" filterUnits="userSpaceOnUse" x="0" y="0" width="200" height="120">
+
+                <!-- offsetBlur -->
+                <feGaussianBlur in="SourceAlpha" stdDeviation="4" result="blur" />
+                <feOffset in="blur" dx="4" dy="4" result="offsetBlur" />
+
+                <!-- litPaint -->
+                <feSpecularLighting in="blur" surfaceScale="5" specularConstant=".75" specularExponent="20"
+                    lighting-color="#bbbbbb" result="specOut">
+                    <fePointLight x="-5000" y="-10000" z="20000" />
+                </feSpecularLighting>
+                <feComposite in="specOut" in2="SourceAlpha" operator="in" result="specOut" />
+                <feComposite in="SourceGraphic" in2="specOut" operator="arithmetic" k1="0" k2="1" k3="1" k4="0"
+                    result="litPaint" />
+
+                <!-- merge offsetBlur + litPaint -->
+                <feMerge>
+                    <feMergeNode in="offsetBlur" />
+                    <feMergeNode in="litPaint" />
+                </feMerge>
+            </filter>
+        </defs>
+
+        <!-- Graphic elements -->
+        <g filter="url(#MyFilter)">
+            <path fill="none" stroke="#D90000" stroke-width="10"
+                d="M50,66 c-50,0 -50,-60 0,-60 h100 c50,0 50,60 0,60z" />
+            <path fill="#D90000" d="M60,56 c-30,0 -30,-40 0,-40 h80 c30,0 30,40 0,40z" />
+            <g fill="#FFFFFF" stroke="black" font-size="45" font-family="Verdana">
+                <text x="52" y="52">SVG</text>
+            </g>
+        </g>
+    </svg>
+    <!-- 
+        Step 01: <feGaussianBlur in="SourceAlpha" stdDeviation="4" result="blur"/>:
+        >> <feGaussianBlur> takes in "SourceAlpha", which is the alpha channel of the source graphic, applies a blur of 4, and stores the result in a temporary buffer named "blur"
+        
+        Step 02: <feOffset in="blur" dx="4" dy="4" result="offsetBlur"/>:
+        >> <feOffset> takes in "blur", which we previously created, shifts the result 4 to the right and 4 to the bottom, and stores the result in the buffer "offsetBlur"
+        >> two first primitives just created a drop shadow
+
+        Step 03: 
+        <feSpecularLighting in="offsetBlur"
+                    surfaceScale="5" specularConstant=".75"
+                    specularExponent="20" lighting-color="#bbbbbb"
+                    result="specOut">
+                    <fePointLight x="-5000" y="-10000" z="20000"/>
+        </feSpecularLighting>
+        >> <feSpecularLighting> takes in "offsetBlur", generates a lighting effect, and stores the result in the buffer "specOut"
+        
+        Step 04: <feComposite in="specOut" in2="SourceAlpha" operator="in" result="specOut"/>: 
+        >> first <feComposite> takes in "specOut" and "SourceAlpha", masks out the result of "specOut" so that the result is not bigger than "SourceAlpha" (the original source graphic), and overrides the result "specOut"
+        
+        Step 05: <feComposite in="SourceGraphic" in2="specOut" operator="arithmetic" k1="0" k2="1" k3="1" k4="0" result="litPaint"/>:
+        >> second <feComposite> takes in "SourceGraphic" and "specOut", adds the result of "specOut" on top of "SourceGraphic", and stores the result in "litPaint"
+        
+        Step 06: 
+        <feMerge>
+            <feMergeNode in="offsetBlur"/>
+            <feMergeNode in="litPaint"/>
+        </feMerge>
+        >> Finally, <feMerge> merges together "offsetBlur", which is the drop shadow, and "litPaint", which is the original source graphic with a lighting effect
+     -->
+
+
+    <!-- 
+         SVG fonts: base for defining an SVG font is the <font> element:
+         >> It was not meant for compatibility with other formats like PostScript or OTF, but rather as a simple means of embedding glyph information into SVG when rendered
+         >> SVG Fonts are currently supported only in Safari and Android Browser
+
+         Defining a font: 
+         >> There are some ingredients required for embedding a font in SVG
+         >> We start with the <font> element
+         >> This bears an id attribute, to enable it to be referenced via a URI (see below)
+         >> horiz-adv-x attribute determines how wide a character is on average compared to the path definitions of the single glyphs, value 1000 sets a reasonable value to work with
+         >> There are several accompanying attributes that help further define the basic glyph-box layout
+         >> <font-face> element is the SVG equivalent of the CSS @font-face declaration, It defines basic properties of the final font such as weight, style, etc
+         >> Its child, the <font-face-src> element, corresponds to CSS' src descriptor in @font-face declarations
+         >> You can point to external sources for font declarations by means of its children <font-face-name> and <font-face-uri>
+         >> Following <font-face-src> is a <missing-glyph> element, This defines what should be displayed if a certain glyph is not found in the font and if there are no fallback mechanisms, It also shows how glyphs are created: By adding any graphical SVG content inside
+         >> You can use literally any other SVG elements in here, even <filter>, <a> or <script>
+         >> For simple glyphs, however, you can add a d attribute — this defines a shape for the glyph exactly like how standard SVG paths work
+         >> actual glyphs are then defined by <glyph> elements
+         >> most important attribute is unicode. It defines the unicode codepoint represented by this glyph
+         >>  If you also specify the lang attribute on a glyph, you can further restrict it to certain languages (represented by xml:lang on the target) exclusively
+         >> Again, you can use arbitrary SVG to define the glyph, which allows for great effects in supporting user agents
+         >> There are two further elements that can be defined inside font: <hkern> and <vkern>
+         >> Each carries references to at least two characters (attributes u1 and u2) and an attribute k that determines how much the distance between those characters should be decreased: <hkern u1="A" u2="V" k="20" />
+         >> 
+      -->
+    <font id="Font1" horiz-adv-x="1000">
+        <font-face font-family="Super Sans" font-weight="bold" font-style="normal" units-per-em="1000" cap-height="600"
+            x-height="400" ascent="700" descent="300" alphabetic="0" mathematical="350" ideographic="400" hanging="500">
+            <font-face-src>
+                <font-face-name name="Super Sans Bold" />
+            </font-face-src>
+        </font-face>
+        <missing-glyph>
+            <path d="M0,0h200v200h-200z" />
+        </missing-glyph>
+        <glyph unicode="!" horiz-adv-x="300">
+            <!-- Outline of exclamation point glyph -->
+        </glyph>
+        <glyph unicode="@">
+            <!-- Outline of @ glyph -->
+        </glyph>
+        <!-- more glyphs -->
+    </font>
+
+    <!-- 
+        Referencing a font:
+        >> When you have put together your font declaration as described above, you can just use a simple font-family attribute to actually apply the font to some SVG text
+        >> However, you are free to combine several methods for great freedom of how and where to define the font
+     -->
+    <font>
+        <font-face font-family="Super Sans" />
+        <!-- and so on -->
+    </font>
+
+    <text font-family="Super Sans">My text uses Super Sans</text>
+
+    <!-- 
+        Option: Use CSS #font-face: You can use @font-face to reference remote (and not so remote) fonts:
+     -->
+    <font id="Super_Sans">
+        <!-- and so on -->
+    </font>
+
+    <style type="text/css">
+        @font-face {
+            font-family: "Super Sans";
+            src: url(#Super_Sans);
+        }
+    </style>
+
+    <text font-family="Super Sans">My text uses Super Sans</text>
+
+    <!-- 
+        Option: reference a remote font: ont-face-uri element allows you to reference an external font, hence allowing greater re-usability:
+     -->
+    <font>
+        <font-face font-family="Super Sans">
+            <font-face-src>
+                <font-face-uri xlink:href="fonts.svg#Super_Sans" />
+            </font-face-src>
+        </font-face>
+    </font>
+
+
+    <!-- 
+         SVG image element: SVG <image> element allows for raster images to be rendered within an SVG object:
+         >> There are some important things top take note of: 
+            >> If you do not set the x or y attributes, they will be set to 0
+            >> If you do not set the height or width attributes, they will be set to 0
+            >> Having a height or width attribute of 0 will disable rendering of the image
+     -->
+    <?xml version="1.0" standalone="no"?>
+    <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+    <svg width="5cm" height="4cm" version="1.1" xmlns="http://www.w3.org/2000/svg"
+        xmlns:xlink="http://www.w3.org/1999/xlink">
+        <image href="firefox.jpg" x="0" y="0" height="50px" width="50px" />
+    </svg>
+
+    <!-- 
+        Tools for SVG:
+        Inkscape, Adobe Illustrator, Apache Batik, Image Magick, rsvg, Raphael JS, , Snap,svg,  Google Docs, JSXGraph and more
+     -->
+     
 </body>
 
 </html>
