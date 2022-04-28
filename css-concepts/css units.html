@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS Units</title>
+</head>
+
+<body>
+    <!-- 
+        Absolute vs Relative Units: 
+
+        Absoloute Units: 
+            >> Absolute units are those that are always the same in any context
+            >> px is an absolute unit because the size of a pixel doesn’t change relative to anything else on the page
+            >> In fact, px is the only absolute unit you should be using for web projects
+            >> rest of them make more sense in a print setting because they are related to physical units such as in (inch) and cm (centimeter)
+        
+        Relative Units: 
+            >> Relative units are units that can change based on their context
+            >> em and rem: but as a rule-of-thumb, prefer rem
+                >> 1em is the font-size of an element (or the element’s parent if you’re using it to set font-size), 
+                    >> for example, if an element’s font-size is 16px, then setting its width to 4em would make its width 64px (16 * 4 == 64)
+                >> 1rem is the font-size of the root element (either :root or html)
+                    >> math works the same with rem as it did with em, but without the added complexity of keeping track of the parent’s font size
+                    >> Relying on em could mean that a particular size could change if the context changes, which is very likely not the behavior you want
+                    >> Using a relative size like rem to define font sizes across your website is recommended
+        
+        Viewport Units:
+            >> units vh and vw relate to the size of the viewport
+            >> Specifically, 1vh is equal to 1% of the viewport height and 1vw is equal to 1% of the viewport width
+            >> These can be useful any time you want something to be sized relative to the viewport, examples including full-height heroes, full-screen app-like interfaces
+     -->
+
+    <!-- 
+         mdn article on 'css values and units'
+
+         Numbers, lengths, and percentages:
+            >> integer: An <integer> is a whole number such as 1024 or -55
+            >> number: A <number> represents a decimal number — it may or may not have a decimal point with a fractional component (e.g. 0.255, 128, or -1.2)
+            >> dimension: 
+                >> A <dimension> is a <number> with a unit attached to it. For example, 45deg, 5s, or 10px
+                >> <dimension> is an umbrella category that includes the <length>, <angle>, <time>, and <resolution> types
+            >> percentage: 
+                >> A <percentage> represents a fraction of some other value. For example, 50%
+                >> Percentage values are always relative to another quantity
+                >> For example, an element's length is relative to its parent element's length
+            >> Lengths: 
+                >> numeric type you will come across most frequently is <length>, For example 10px (pixels) or 30em
+                >> There are two types of lengths used in CSS — relative and absolute
+                >>  It's important to know the difference in order to understand how big or small things will become
+
+                >> Absolute length units: Most of these units are more useful when used for print, rather than screen output:
+                    >> Centimeters, cm
+                    >> Millimeters, mm
+                    >> Quarter-millimeters, Q
+                    >> inches, in
+                    >> Picas, pc
+                    >> Points, pt
+                    >> Pixels, px (mostly used for web-projects)
+                
+                >> Relative length units:
+                    >> Relative length units are relative to something else, perhaps the size of the parent element's font, or the size of the viewport
+                    >> Some of the most useful units for web development are listed below:
+                    >> em
+                        >> Font size of the parent, in the case of typographical properties like font-size, and font size of the element itself, in the case of other properties like width
+                    >> ex
+                        >> x-height of the element's font
+                    >> ch
+                        >> advance measure (width) of the glyph "0" of the element's font
+                    >> rem
+                        >> Font size of the root element
+                    >> lh
+                        >> line height of element
+                    >> vw
+                        >> 1% of the viewport's width
+                    >> vh
+                        >> 1% of the viewport's height
+                    >> vmin:
+                        >> 1% of the viewport's smaller dimension
+                    >> vmax
+                        >> 1% of the viewport's larger dimension
+                
+                >> ems and rems: mostly frequently encountered units: 
+                    >> To recap, the em unit means "my parent element's font-size" in the case of typography
+                    typo >> To recap, the rem unit means "The root element's font-size". (rem stands for "root em".)
+                
+                >> Percentages: 
+                    >> In a lot of cases, a percentage is treated in the same way as a length
+                    >> thing with percentages is that they are always set relative to some other value
+                    >> For example: 
+                        >> if you set an element's font-size as a percentage, it will be a percentage of the font-size of the element's parent
+                        >> If you use a percentage for a width value, it will be a percentage of the width of the parent
+                    >> Note that, while many value types accept a length or a percentage, there are some that only accept length
+                    >> If the allowed value includes <length-percentage> then you can use a length or a percentage. If the allowed value only includes <length>, it is not possible to use a percentage
+                    
+                >> Numbers: 
+                    >> Some value types accept numbers, without any unit added to them
+                    >> An example of a property which accepts a unitless number is the opacity property, which controls the opacity of an element (how transparent it is)
+                >> Color: 
+                    typo >> standard color system available in modern computers supports 24-bit colors, which allows the display of about 16.7 million distinct colors via a combination of different red, green and blue channels with 256 different values per channel (256 x 256 x 256 = 16,777,216.)
+                    >> Color keywords: 
+                        >> There are a number of these keywords, some of which have fairly entertaining names! You can see a full list on the page for the <color> value type
+                    >> Hexadecimal RGB values: 
+                        >> Each hex value consists of a hash/pound symbol (#) followed by six hexadecimal numbers, each of which can take one of 16 values between 0 and f (which represents 15) — so 0123456789abcdef
+                        typo >> Each pair of values represents one of the channels — red, green and blue — and allows us to specify any of the 256 available values for each (16 x 16 = 256.)
+                        >> These values are a bit more complex and less easy to understand, but they are a lot more versatile than keywords — you can use hex values to represent any color you want to use in your color scheme
+                    >> RGB and RGBA values: 
+                        >> An RGB value is a function — rgb() — which is given three parameters that represent the red, green, and blue channel values of the colors, in much the same way as hex values
+                        >> difference with RGB is that each channel is represented not by two hex digits, but by a decimal number between 0 and 255 — somewhat easier to understand
+                        >> You can also use RGBA colors — these work in exactly the same way as RGB colors, and so you can use any RGB values
+                        >> However, there is a fourth value that represents the alpha channel of the color, which controls opacity, Values in between 0 and 1 give you different levels of transparency
+                        >> When you use opacity you make the element and everything inside it opaque, whereas using RGBA colors only makes the color you are specifying opaque
+                        >> both rgba() and rgb() accept colors with and without alpha channel values
+                        >> but separating out non-transparent and transparent color definitions to use the different functions gives (very) slightly better browser support and can act as a visual indicator of where transparent colors are being defined in your code
+                    >> HSL and HSLA values:
+                        >> Instead of red, green, and blue values, the hsl() function accepts hue, saturation, and lightness values, which are used to distinguish between the 16.7 million colors, but in a different way:
+                            >> Hue: 
+                                >> base shade of the color
+                                >> This takes a value between 0 and 360, representing the angles around a color wheel
+                            >> Saturation: 
+                                >> This takes a value from 0–100%
+                                >> where 0 is no color (it will appear as a shade of grey), and 100% is full color saturation
+                            >> Lightness: 
+                                >> This takes a value from 0–100%
+                                >> where 0 is no light (it will appear completely black) and 100% is full light (it will appear completely white)
+                        >> Just as RGB has RGBA, HSL has an HSLA equivalent, which gives you the same ability to specify the alpha channel
+                >> You can mix and match color models, however for consistency it is usually best if your entire project uses the same one!
+                
+      -->
+</body>
+
+</html>
