@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>More about css properties</title>
+</head>
+
+<body>
+    <!-- 
+        Background:
+            >> background property is actually a shorthand for 8 different background-related properties
+                >> background-attachment
+                >> background-clip
+                >> background-color
+                >> background-image
+                >> background-origin
+                >> background-position
+                >> background-repeat
+                >> background-size
+            >> Beyond changing background-colors, you can also specify background images, change the position and size of background images, and change how background images repeat or tile if they are too small to fill their container
+            >> It is also possible to have multiple background layers
+            >> it is possible to use these properties individually, and in some cases it might be easier and more clear to do that than defaulting to the shorthand
+        
+        Borders:
+            >> border property is another shorthand, basically you just need to define a size, style and color
+            >> border-radius is the property that is used to create rounded corners on things
+            >> it’s possible to get fancy and define different radii for each corner of an element
+            >> Borders vs. outlines: Borders and outlines are very similar, but differs in following ways:
+                >> Outlines never take up space, as they are drawn outside of an element's content
+                >> outlines don't have to be rectangular, although they usually are
+            >> border radius: 
+                >> This property is a shorthand for the following CSS properties: 
+                    >> border-top-left-radius
+                    >> border-top-right-radius
+                    >> border-bottom-right-radius
+                    >> border-bottom-left-radius
+        box-shadow:
+            >> box-shadow adds a shadow effect around an element
+            >> This is useful to create a sense of depth on your page and to add subtle separation between elements
+            >> In usage it’s pretty simple, but keep in mind that it’s best used sparingly, and subtly
+            >> Prefer lighter, barely visible shadows to darker or brighter colors
+            >> You can set multiple effects separated by commas
+            >> A box shadow is described by X and Y offsets relative to the element, blur and spread radius, and color
+            >> box-shadow property enables you to cast a drop shadow from the frame of almost any element
+            >> If a border-radius is specified on the element with a box shadow, the box shadow takes on the same rounded corners
+            >> z-ordering of multiple box shadows is the same as multiple text shadows (the first specified shadow is on top)
+            >> Specify a single box-shadow using:
+                >> Two, three, or four <length> values.
+                    >> If only two values are given, they are interpreted as <offset-x> and <offset-y> values.
+                    >> If a third value is given, it is interpreted as a <blur-radius>.
+                    >> If a fourth value is given, it is interpreted as a <spread-radius>.
+                >> Optionally, the inset keyword.
+                >> Optionally, a <color> value.
+            >> Values: 
+                >> inset: 
+                    >> If not specified (default), the shadow is assumed to be a drop shadow (as if the box were raised above the content)
+                    >> presence of the inset keyword changes the shadow to one inside the frame (as if the content was depressed inside the box)
+                    >> Inset shadows are drawn inside the border (even transparent ones), above the background, but below content
+                >> <offset-x> <offset-y>: 
+                    >> These are two <length> values to set the shadow offset
+                    >> <offset-x> specifies the horizontal distance
+                        >> Negative values place the shadow to the left of the element
+                    >> <offset-y> specifies the vertical distance
+                        >> Negative values place the shadow above the element
+                        >> If both values are 0, the shadow is placed behind the element (and may generate a blur effect if <blur-radius> and/or <spread-radius> is set)
+                    >> <blur-radius>: 
+                        >> larger this value, the bigger the blur, so the shadow becomes bigger and lighter
+                        >> Negative values are not allowed
+                        >> If not specified, it will be 0 (the shadow's edge is sharp)
+                    >> <spread-radius>: 
+                        >> Positive values will cause the shadow to expand and grow bigger, negative values will cause the shadow to shrink
+                        >> If not specified, it will be 0 (the shadow will be the same size as the element)
+                    >> <color>: 
+                        >> If not specified, it defaults to currentcolor
+                >> When the x-offset, y-offset, and blur are all zero, the box shadow will be a solid-colored outline of equal-size on all sides
+                >> shadows are drawn back to front, so the first shadow sits on top of subsequent shadows
+                >> A box-shadow does not impact box model dimensions
+
+        Overflow
+            >> It is possible, using overflow, to define what happens when it’s content is too big to fit
+            >> most common usage is likely to add scrollbars to an element inside a webpage, for example a card style element with scrollable content
+            >> This property is a shorthand for the following CSS properties:
+                >> overflow-x
+                >> overflow-y
+                >> If two keywords are specified, the first applies to overflow-x and the second to overflow-y
+                >> otherwise, both overflow-x and overflow-y are set to the same value
+            >> values: 
+                >> visible: 
+                    >> Content is not clipped and may be rendered outside the padding box
+                >> hidden: 
+                    >> Content is clipped if necessary to fit the padding box
+                    >> No scrollbars are provided, and no support for allowing the user to scroll (such as by dragging or using a scroll wheel) is allowed
+                    >> content can be scrolled programmatically, so, element is still a scroll container
+                >> clip: 
+                    >> Similar to hidden, the content is clipped to the element's padding box
+                    >> difference between clip and hidden is that the clip keyword also forbids all scrolling, including programmatic scrolling
+                    >> box is not a scroll container, and does not start a new formatting context
+                        >> If you wish to start a new formatting context, you can use display: flow-root to do so
+                >> scroll: 
+                    >> Content is clipped if necessary to fit the padding box
+                    >> Browsers always display scrollbars whether or not any content is actually clipped, preventing scrollbars from appearing or disappearing as content changes
+                    >> Printers may still print overflowing content
+                >> auto: 
+                    >> If content fits inside the padding box, it looks the same as visible, but still establishes a new block formatting context
+                    >> Desktop browsers provide scrollbars if content overflows
+            >> description: 
+                >> Overflow options include clipping, showing scrollbars, or displaying the content flowing out of its container into the surrounding area
+                >> Specifying a value other than visible (the default) or clip creates a new block formatting context
+                    >> if a float intersected with the scrolling element it would forcibly rewrap the content after each scroll step, leading to a slow scrolling experience
+                >> In order for overflow to have an effect, the block-level container must have either a set height (height or max-height) or white-space set to nowrap
+                >> Setting one axis to visible (the default) while setting the other to a different value results in visible behaving as auto
+                >> avaScript Element.scrollTop property may be used to scroll an HTML element even when overflow is set to hidden
+        
+        Opacity: 
+            >> Opacity is the degree to which content behind an element is hidden, and is the opposite of transparency
+            >> opacity applies to the element as a whole, including its contents, even though the value is not inherited by child elements
+            >> Thus, the element and its children all have the same opacity relative to the element's background, even if they have different opacities relative to one another
+            >> Using opacity with a value other than 1 places the element in a new stacking context
+            >> To change the opacity of a background only, use the background property with a color value that allows for an alpha channel
+
+     -->
+    <!-- border example from mdn -->
+    <style>
+        /* div, */
+        .border-example {
+            border: 0.5rem outset pink;
+            outline: 0.5rem solid khaki;
+            box-shadow: 0 0 0 2rem skyblue;
+            border-radius: 12px;
+            font: bold 1rem sans-serif;
+            margin: 2rem;
+            padding: 1rem;
+            outline-offset: 0.5rem;
+        }
+
+        /* border-radius */
+        .br-example {
+            border: dotted;
+            border-radius: 40px 10px;
+            background: gold;
+            border-width: 10px 4px;
+            text-align: center;
+            padding: 2em;
+        }
+    </style>
+    <div class="container-for-border-example">
+        <div class="border-example">I have a border, an outline, and a box shadow! Amazing, isn't it?</div>
+        <div class="br-example">border and border radius</div>
+    </div>
+
+    <!-- box-shadows examples -->
+    <style>
+        /* inset shadow */
+        blockquote {
+            padding: 20px;
+            box-shadow:
+                inset 0 -3em 3em rgba(0, 0, 0, 0.1),
+                0 0 0 2px rgb(255, 255, 255),
+                0.3em 0.3em 1em rgba(0, 0, 0, 0.3);
+        }
+
+        /* offset shadow */
+        /* p, */
+        .offset-shadow {
+            box-shadow: 0 0 0 2em #F4AAB9,
+                0 0 0 4em #66CCFF;
+            margin: 4em;
+            padding: 1em;
+        }
+    </style>
+    <div class="container-for-box-shadows">
+        <!-- inset shadow -->
+        <div class="inset-container">
+            <blockquote><q>You may shoot me with your words,<br />
+                    You may cut me with your eyes,<br />
+                    You may kill me with your hatefulness,<br />
+                    But still, like air, I'll rise.</q>
+                <p>&mdash; Maya Angelou</p>
+            </blockquote>
+        </div>
+
+        <div class="offset-container">
+            <div>
+                <p class="offset-shadow">Hello World</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- overflow examples -->
+    <style>
+        .example-container {
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .conatiner-for-overflow-examples {
+            margin: 1em;
+            font-size: 1.2em;
+        }
+
+        .visible,
+        .example-container p {
+            width: 8em;
+            height: 5em;
+            border: dotted;
+        }
+
+        p.visible,
+        .visible {
+            overflow: visible;
+        }
+
+        p.hidden,
+        .hidden {
+            overflow: hidden;
+        }
+
+        p.scroll,
+        .scroll {
+            overflow: scroll;
+        }
+
+        p.auto,
+        .auto {
+            overflow: auto;
+        }
+    </style>
+    <div class="example-container">
+        <div class="conatiner-for-overflow-examples">
+            <code>visible</code>
+            <p class="visible">
+                Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.
+            </p>
+        </div>
+
+        <div>
+            <code>hidden</code>
+            <p class="hidden">
+                Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.
+            </p>
+        </div>
+
+        <div>
+            <code>scroll</code>
+            <p class="scroll">
+                Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.
+            </p>
+        </div>
+
+        <div>
+            <code>auto</code>
+            <p class="auto">
+                Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.
+            </p>
+        </div>
+    </div>
+
+    <!-- opacity examples -->
+    <div class="conatiner-for-opacity-examples">
+        <style>
+            .setting-opacity div {
+                background-color: yellow;
+                font-weight: bold;
+                font-size: 130%;
+            }
+
+            .light {
+                opacity: 0.2;
+                /* Barely see the text over the background */
+            }
+
+            .medium {
+                opacity: 0.5;
+                /* See the text more clearly over the background */
+            }
+
+            .heavy {
+                opacity: 0.9;
+                /* See the text very clearly over the background */
+            }
+        </style>
+        <div class="setting-opacity">
+            <div class="light">You can barely see this.</div>
+            <div class="medium">This is easier to see.</div>
+            <div class="heavy">This is very easy to see.</div>
+        </div>
+        <div class="on-hover">
+            <style>
+                img.opacity {
+                    opacity: 1;
+                }
+
+                img.opacity:hover {
+                    opacity: 0.5;
+                }
+
+                .wrapper {
+                    width: 200px;
+                    height: 160px;
+                    background-color: #f03cc3;
+                    background-image: linear-gradient(90deg, transparent 50%,
+                            rgba(255, 255, 255, .5) 50%);
+                    background-size: 20px 20px;
+                }
+            </style>
+            <div class="wrapper">
+                <img src="//interactive-examples.mdn.mozilla.net/media/dino.svg" alt="MDN Dino" width="128" height="146"
+                    class="opacity">
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
