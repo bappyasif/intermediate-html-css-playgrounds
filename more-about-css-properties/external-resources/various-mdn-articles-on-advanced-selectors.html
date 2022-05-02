@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Various mdn articles on advanced slecetors</title>
+</head>
+
+<body>
+    <!-- 
+        Psuedo element: 
+        >> they act as if you had added a whole new HTML element into the markup, rather than applying a class to existing elements
+        
+        >> use of the ::before and ::after pseudo-elements along with the content property is referred to as "Generated Content" in CSS
+     -->
+    <div class="contaner-for-psuedo-element">
+        <style>
+            article p::first-line {
+                font-size: 120%;
+                font-weight: bold;
+            }
+
+            /* Combining pseudo-classes and pseudo-elements */
+            article p:first-child::first-line {
+                font-size: 120%;
+                font-weight: bold;
+            }
+
+            /* Generating content with ::before and ::after */
+            .box::before {
+                content: "This should show before the other content."
+            }
+
+            /* A more valid use of these pseudo-elements is to insert an icon */
+            .box::after {
+                content: " ➥"
+            }
+        </style>
+        <article>
+            <p>Veggies es bonus vobis, proinde vos postulo essum magis kohlrabi welsh onion daikon amaranth tatsoi
+                tomatillo
+                melon azuki bean garlic.</p>
+
+            <p>Gumbo beet greens corn soko endive gumbo gourd. Parsley shallot courgette tatsoi pea sprouts fava bean
+                collard
+                greens dandelion okra wakame tomato. Dandelion cucumber earthnut pea peanut soko zucchini.</p>
+
+            <p class="box">Content in the box in my HTML page.</p>
+        </article>
+    </div>
+
+    <!-- Attriubuites selector -->
+    <div class="container-for-attribute-selctors">
+        <style>
+            a {
+                color: blue;
+            }
+
+            /* Internal links, beginning with "#" */
+            a[href^="#"] {
+                background-color: gold;
+            }
+
+            /* Links with "example" anywhere in the URL */
+            a[href*="example"] {
+                background-color: silver;
+            }
+
+            /* Links with "insensitive" anywhere in the URL,
+   regardless of capitalization */
+            a[href*="insensitive"i] {
+                color: cyan;
+            }
+
+            /* Links with "cAsE" anywhere in the URL,
+with matching capitalization */
+            a[href*="cAsE"s] {
+                color: pink;
+            }
+
+            /* Links that end in ".org" */
+            a[href$=".org"] {
+                color: red;
+            }
+
+            /* Links that start with "https" and end in ".org" */
+            a[href^="https"][href$=".org"] {
+                color: green;
+            }
+        </style>
+        <ul>
+            <li><a href="#internal">Internal link</a></li>
+            <li><a href="http://example.com">Example link</a></li>
+            <li><a href="#InSensitive">Insensitive internal link</a></li>
+            <li><a href="http://example.org">Example org link</a></li>
+            <li><a href="https://example.org">Example https org link</a></li>
+        </ul>
+    </div>
+
+    <div class="another-attibute-use-case">
+        <style>
+            /* All divs with a `lang` attribute are bold. */
+            div[lang] {
+                font-weight: bold;
+            }
+
+            /* All divs without a `lang` attribute are italicized. */
+            div:not([lang]) {
+                font-style: italic;
+            }
+
+            /* All divs in US English are blue. */
+            div[lang~="en-us"] {
+                color: blue;
+            }
+
+            /* All divs in Portuguese are green. */
+            div[lang="pt"] {
+                color: green;
+            }
+
+            /* All divs in Chinese are red, whether
+   simplified (zh-CN) or traditional (zh-TW). */
+            div[lang|="zh"] {
+                color: red;
+            }
+
+            /* All divs with a Traditional Chinese
+   `data-lang` are purple. */
+            /* Note: You could also use hyphenated attributes
+   without double quotes */
+            div[data-lang="zh-TW"] {
+                color: purple;
+            }
+        </style>
+        <div lang="en-us en-gb en-au en-nz">Hello World!</div>
+        <div lang="pt">Olá Mundo!</div>
+        <div lang="zh-CN">世界您好！</div>
+        <div lang="zh-TW">世界您好！</div>
+        <div data-lang="zh-TW">世界您好！</div>
+    </div>
+
+    <div class="attribute-selector-for-types">
+        <style>
+            /* Case-sensitivity depends on document language */
+            ol[type="a"] {
+                list-style-type: lower-alpha;
+                background: red;
+            }
+
+            ol[type="b"s] {
+                list-style-type: lower-alpha;
+                background: lime;
+            }
+
+            ol[type="B"s] {
+                list-style-type: upper-alpha;
+                background: grey;
+            }
+
+            ol[type="c"i] {
+                list-style-type: upper-alpha;
+                background: green;
+            }
+        </style>
+        <ol type="A">
+            <li>Red background for case-insensitive matching (default for the type selector)</li>
+        </ol>
+        <ol type="b">
+            <li>Lime background if `s` modifier is supported (case-sensitive match)</li>
+        </ol>
+        <ol type="B">
+            <li>Grey background if `s` modifier is supported (case-sensitive match)</li>
+        </ol>
+        <ol type="C">
+            <li>Green background if `i` modifier is supported (case-insensitive match)</li>
+        </ol>
+
+    </div>
+</body>
+
+</html>
