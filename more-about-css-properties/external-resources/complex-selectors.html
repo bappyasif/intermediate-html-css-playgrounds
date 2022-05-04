@@ -338,6 +338,76 @@
         >> It is important to pay attention the speed and performance of selectors, as using too many intricate selectors can slow down the rendering of a page
         >> Be attentive and when a selector begins to look a bit foreign think about revisiting it, and seeing if a better solution can be found
      -->
+
+    <!-- Some Attributes Selectors Usage -->
+    <!-- Attribute Exactly Equals Certain Value -->
+    <div class="equal-value-attribute-example">
+        <style>
+            h1[rel="external"] {
+                color: red;
+            }
+            a[href="http://perishablepress.com"] { color: blue; }
+        </style>
+        <h1 rel="external">Attribute Equals</h1>
+        <a href="http://perishablepress.com">Jeff Starr</a>
+        <a href="http://davidwalsh.name">David Walsh</a>
+        <a href="http://accidentalninja.net/">Richard Felix</a>
+    </div>
+
+    <!-- Attribute Contains Certain Value Somewhere: “*=” means “match the following value anywhere in the attribute value” -->
+    <div class="attribute-value-match-anywhere">
+        <style>
+            h1[rel*="external"] { color: red; }
+            div[id*="post"]  { color: magenta; }
+        </style>
+        <h1 rel="xxxexternalxxx">Attribute Contains</h1>
+        <div id="post_1"></div>
+        <div id="post_two"></div>
+        <div id="third_post"></div>
+    </div>
+
+    <!-- Attribute Begins with Certain Value -->
+    <div class="attribute-certain-value-container">
+        <style>
+            h1[rel^="external"] { color: red; }
+            a[href^="http://perishablepress.com"] { color: maroon; }
+        </style>
+        <h1 rel="external-link yep">Attribute Begins</h1>
+    </div>
+
+    <!-- Attribute Ends with Certain Value -->
+    <div class="attributes-ends-with-certain-value-example">
+        <style>
+            h1[rel$="external"] { color: red; }
+            a[href$=".pdf"] { background: url(icon-pdf.png) left center no-repeat; padding-left: 30px; }
+            a[href$=".doc"] { background: url(icon-doc.png) left center no-repeat; padding-left: 30px; }
+        </style>
+        <h1 rel="friend external">Attribute Ends</h1>
+    </div>
+
+    <!-- Attribute is within Space Separated List -->
+    <div class="space-separated-list-attribute">
+        <style>
+            h1[rel~="external"] { color: red; }
+        </style>
+        <h1 rel="friend external sandwich">Attribute Space Separated</h1>
+    </div>
+
+    <!-- Attribute is the start of a Dash Separated List -->
+    <div class="dahs-separated-attribute-selector">
+        <style>
+            h1[rel|="friend"] { color: red; }
+        </style>
+        <h1 rel="friend-external-sandwich">Attribute Dash Separated</h1>
+    </div>
+
+    <!-- Multiple Attribute Matches: requires all of them to match for the selector itself to match -->
+    <div class="multiple-attribute-selectors-example">
+        <style>
+            h1[rel="handsome"][title^="Important"] { color: red; }
+        </style>
+        <h1 rel="handsome" title="Important note">Multiple Attributes</h1>
+    </div>
 </body>
 
 </html>
