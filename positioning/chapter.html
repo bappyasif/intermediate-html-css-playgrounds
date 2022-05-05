@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elements Positioning</title>
+</head>
+
+<body>
+    <!-- 
+        Static and Relative Positioning: 
+        >> Static is the default position of every element, and properties top, right, bottom, and left do not affect the position of the element
+        >> Relative on the other hand is pretty much the same as static, but properties top, ri....(etc.) displace the element relative to its normal position in the flow of the document
+
+        Absolute Positioning: 
+        >> position: absolute allows you to position something at an exact point on the screen without disturbing the other elements around it
+        >> More specifically, using absolute positioning on an element will remove that element from the normal document flow while being positioned relative to an ancestor element
+        >> To put it in simple terms: elements that are removed from the normal flow of the document don’t affect other elements and are also not affected by other elements
+        >> Using absolute positioning allows you to position elements anywhere on the screen using top, right, bottom, and left properties
+        >> absolute positioning has very specific use cases and if possible, using flexbox or grid should be prioritized
+        >> Absolute positioning shouldn’t be used to do entire page layouts
+     -->
+    <div class="card-container">
+        <style>
+            .card-container {
+                position: relative;
+                width: 100%
+            }
+
+            .card-image {
+                position: absolute;
+                width: 100%;
+                z-index: -1;
+            }
+
+            .card-body {
+                position: absolute;
+                width: 100%;
+                background: black;
+                opacity: 0.6;
+                color: white;
+                top: 8rem;
+                text-align: center;
+                font-size: 1.2em;
+                font-family: roboto;
+            }
+
+            .card-heading {
+                position: absolute;
+            }
+        </style>
+        <img class="card-image" src="https://picsum.photos/450/450">
+        <div class="card-body">
+            <div class="card-heading">This is a cool heading!</div>
+            <p class="card-paragraph">This is some cool placeholder text!</p>
+        </div>
+    </div>
+
+    <!-- 
+        Fixed Positioning: 
+        >> Fixed elements are also removed from the normal flow of the document and are positioned relative to the viewport
+        >> You basically use top, right, bottom, and left properties to position it, and it will stay there as the user scrolls
+        >> This is especially useful for things like navigation bars and floating chat buttons
+        
+        Sticky Positioning: 
+        >> Sticky elements will act like normal elements until you scroll past them, then they start behaving like fixed elements
+        >> They are also not taken out of the normal flow of the document
+        >> It’s useful for things like section-headings
+     -->
+
+    <!-- 
+         mdn article on position
+      -->
+
+    <!-- 
+          position: 
+          >> position CSS property sets how an element is positioned in a document. The top, right, bottom, and left properties determine the final location of positioned elements
+
+          Values: 
+          >> static: 
+            >> element is positioned according to the normal flow of the document
+            >> top, right, bottom, left, and z-index properties have no effect
+            typo?! >> This is the default value for all html elements
+
+        >> relative: 
+            >> element is positioned according to the normal flow of the document, and then offset relative to itself based on the values of top, right, bottom, and left
+            >> offset does not affect the position of any other elements; thus, the space given for the element in the page layout is the same as if position were static
+            >> value creates a new stacking context when the value of z-index is not auto
+            >> Its effect on table-*-group, table-row, table-column, table-cell, and table-caption elements is undefined
+
+        >> absolute: 
+            >> element is removed from the normal document flow, and no space is created for the element in the page layout
+            >> It is positioned relative to its closest positioned ancestor, if any; otherwise, it is placed relative to the initial containing block
+            >> Its final position is determined by the values of top, right, bottom, and left
+            >> This value creates a new stacking context when the value of z-index is not auto
+            >> margins of absolutely positioned boxes do not collapse with other margins
+
+        >> fixed: 
+            >> element is removed from the normal document flow, and no space is created for the element in the page layout
+            >> It is positioned relative to the initial containing block established by the viewport, except when one of its ancestors has a transform, perspective, or filter property set to something other than none, in which case that ancestor behaves as the containing block
+            >> This value always creates a new stacking context
+            >> In printed documents, the element is placed in the same position on every page
+
+        >> sticky: 
+            >> element is positioned according to the normal flow of the document, and then offset relative to its nearest scrolling ancestor and containing block (nearest block-level ancestor), including table-related elements, based on the values of top, right, bottom, and left
+            >> offset does not affect the position of any other elements
+            >> This value always creates a new stacking context
+            >> a sticky element "sticks" to its nearest ancestor that has a "scrolling mechanism" , regardl;ess of it's value, , and also even if that ancestor isn't the nearest actually scrolling ancestor
+
+    Description: 
+        Types of positioning: 
+        >> A positioned element is an element whose computed position value is either relative, absolute, fixed, or sticky, or in other words anything but static
+        >> A relatively positioned element is an element whose computed position value is relative
+            >> top and bottom properties specify the vertical offset from its normal position; the left and right properties specify the horizontal offset
+        >> An absolutely positioned element is an element whose computed position value is absolute or fixed
+            >> top, right, bottom, and left properties specify offsets from the edges of the element's containing block
+            >> containing block is the ancestor relative to which the element is positioned
+            >> if the element has margins, they are added to the offset
+            >> element establishes a new block formatting context (BFC) for its contents
+        >> A stickily positioned element is an element whose computed position value is sticky
+            >> It's treated as relatively positioned until its containing block crosses a specified threshold (such as setting top to value other than auto) within its flow root (or the container it scrolls within), at which point it is treated as "stuck" until meeting the opposite edge of its containing block
+        
+        >> Most of the time, absolutely positioned elements that have height and width set to auto are sized so as to fit their contents
+        >> However, non-replaced, absolutely positioned elements can be made to fill the available vertical space by specifying both top and bottom and leaving height unspecified (that is, auto)
+        >> They can likewise be made to fill the available horizontal space by specifying both left and right and leaving width as auto
+        >> Except for the case just described (of absolutely positioned elements filling the available space):
+            >> Except for the case just described (of absolutely positioned elements filling the available space):
+            >> If both left and right are specified, left wins when direction is ltr (English, horizontal Japanese, etc.) and right wins when direction is rtl (Persian, Arabic, Hebrew, etc.)
+        
+    Accessibility concerns: 
+        >> Ensure that elements positioned with an absolute or fixed value do not obscure other content when the page is zoomed to increase text size
+
+    Performance & Accessibility: 
+        >> Scrolling elements containing fixed or sticky content can cause performance and accessibility issues
+        >> As a user scrolls, the browser must repaint the sticky or fixed content in a new location
+        >> Depending on the content needing to be repainted, the browser performance, and the device's processing speed, the browser may not be able to manage repaints at 60 fps, causing accessibility concerns for people with sensitivities and jank for everyone
+        >>  One solution is to add will-change: transform to the positioned elements to render the element in its own layer, improving repaint speed and therefore improving performance and accessibility
+       -->
+
+    <!-- Examples -->
+    <!-- 
+           Relative positioning: 
+           typo >> Relatively positioned elements are offset(,) a given amount from their normal position within the document but without the offset affecting other elements
+        -->
+    <div class="example-for-relative-positioning">
+        <style>
+            * {
+                box-sizing: border-box;
+            }
+
+            .box {
+                display: inline-block;
+                width: 100px;
+                height: 100px;
+                background: red;
+                color: white;
+            }
+
+            #two {
+                position: relative;
+                top: 20px;
+                left: 20px;
+                background: blue;
+            }
+        </style>
+        <div class="box" id="one">One</div>
+        <div class="box" id="two">Two</div>
+        <div class="box" id="three">Three</div>
+        <div class="box" id="four">Four</div>
+    </div>
+
+    <!-- 
+        Absolute positioning: 
+        >> Elements that are relatively positioned remain in the normal flow of the document
+        >> In contrast, an element that is absolutely positioned is taken out of the flow; thus, other elements are positioned as if it did not exist
+        >> absolutely positioned element is positioned relative to its nearest positioned ancestor (i.e., the nearest ancestor that is not static)
+        >> If a positioned ancestor doesn't exist, it is positioned relative to the ICB (initial containing block), which is the containing block of the document's root element
+     -->
+    <div class="example-for-absolute-positioning">
+        <style>
+            * {
+                box-sizing: border-box;
+            }
+
+            .example-for-absolute-positioning {
+                width: 500px;
+                margin: 0 auto;
+                position: relative;
+            }
+
+            .example-for-absolute-positioning>p {
+                background: aqua;
+                border: 3px solid blue;
+                padding: 10px;
+                margin: 10px;
+            }
+
+            span {
+                background: red;
+                border: 1px solid black;
+            }
+
+            .positioned {
+                position: absolute;
+                background: yellow;
+                top: 30px;
+                left: 30px;
+            }
+        </style>
+        <h1>Absolute positioning</h1>
+
+        <p>I am a basic block level element. My adjacent block level elements sit on new lines below me.</p>
+
+        <p class="positioned">By default we span 100% of the width of our parent element, and we are as tall as our
+            child content. Our total width and height is our content + padding + border width/height.</p>
+
+        <p>We are separated by our margins. Because of margin collapsing, we are separated by the width of one of our
+            margins, not both.</p>
+
+        <p>inline elements <span>like this one</span> and <span>this one</span> sit on the same line as one another, and
+            adjacent text nodes, if there is space on the same line. Overflowing inline elements <span>wrap onto a new
+                line if possible — like this one containing text</span>, or just go on to a new line if not, much like
+            this image will do: <img src="long.jpg"></p>
+    </div>
+
+    <!-- 
+        Fixed positioning: 
+        >> Fixed positioning is similar to absolute positioning, with the exception that the element's containing block is the initial containing block established by the viewport, unless any ancestor has transform, perspective, or filter property set to something other than none (see CSS Transforms Spec), which then causes that ancestor to take the place of the elements containing block
+        >> This can be used to create a "floating" element that stays in the same position regardless of scrolling
+     -->
+    <div class="example-for-fixed-positioning">
+        <style>
+            * {
+                box-sizing: border-box;
+            }
+
+            .box {
+                width: 100px;
+                height: 100px;
+                background: red;
+                color: white;
+            }
+
+            .example-for-fixed-positioning #one {
+                position: fixed;
+                top: 80px;
+                left: 10px;
+                background: blue;
+            }
+
+            .outer {
+                width: 500px;
+                height: 300px;
+                overflow: scroll;
+                padding-left: 150px;
+            }
+        </style>
+        <div class="outer">
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam congue tortor eget pulvinar lobortis.
+                Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nam ac dolor
+                augue.
+                Pellentesque mi mi, laoreet et dolor sit amet, ultrices varius risus. Nam vitae iaculis elit.
+                Aliquam mollis interdum libero. Sed sodales placerat egestas. Vestibulum ut arcu aliquam purus viverra
+                dictum vel sit amet mi.
+                Duis nisl mauris, aliquam sit amet luctus eget, dapibus in enim. Sed velit augue, pretium a sem aliquam,
+                congue porttitor tortor.
+                Sed tempor nisl a lorem consequat, id maximus erat aliquet. Sed sagittis porta libero sed condimentum.
+                Aliquam finibus lectus nec ante congue rutrum. Curabitur quam quam, accumsan id ultrices ultrices,
+                tempor et tellus.
+            </p>
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam congue tortor eget pulvinar lobortis.
+                Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nam ac dolor
+                augue.
+                Pellentesque mi mi, laoreet et dolor sit amet, ultrices varius risus. Nam vitae iaculis elit.
+                Aliquam mollis interdum libero. Sed sodales placerat egestas. Vestibulum ut arcu aliquam purus viverra
+                dictum vel sit amet mi.
+                Duis nisl mauris, aliquam sit amet luctus eget, dapibus in enim. Sed velit augue, pretium a sem aliquam,
+                congue porttitor tortor.
+                Sed tempor nisl a lorem consequat, id maximus erat aliquet. Sed sagittis porta libero sed condimentum.
+                Aliquam finibus lectus nec ante congue rutrum. Curabitur quam quam, accumsan id ultrices ultrices,
+                tempor et tellus.
+            </p>
+            <div class="box" id="one">One</div>
+        </div>
+    </div>
+
+    <!-- 
+        Sticky positioning: 
+        >> Sticky positioning can be thought of as a hybrid of relative and fixed positioning
+        >> A stickily positioned element is treated as relatively positioned until it crosses a specified threshold, at which point it is treated as fixed until it reaches the boundary of its parent
+        >> You must specify a threshold with at least one of top, right, bottom, or left for sticky positioning to behave as expected
+        >> Otherwise, it will be indistinguishable from relative positioning 
+     -->
+    <div class="example-for-sticky-positioning">
+        <style>
+            * {
+                box-sizing: border-box;
+            }
+
+            dl>div {
+                background: #FFF;
+                padding: 24px 0 0 0;
+            }
+
+            dt {
+                background: #B8C1C8;
+                border-bottom: 1px solid #989EA4;
+                border-top: 1px solid #717D85;
+                color: #FFF;
+                font: bold 18px/21px Helvetica, Arial, sans-serif;
+                margin: 0;
+                padding: 2px 0 0 12px;
+                position: -webkit-sticky;
+                position: sticky;
+                top: -1px;
+            }
+
+            dd {
+                font: bold 20px/45px Helvetica, Arial, sans-serif;
+                margin: 0;
+                padding: 0 0 0 12px;
+                white-space: nowrap;
+            }
+
+            dd+dd {
+                border-top: 1px solid #CCC;
+            }
+        </style>
+        <dl>
+            <div>
+                <dt>A</dt>
+                <dd>Andrew W.K.</dd>
+                <dd>Apparat</dd>
+                <dd>Arcade Fire</dd>
+                <dd>At The Drive-In</dd>
+                <dd>Aziz Ansari</dd>
+            </div>
+            <div>
+                <dt>C</dt>
+                <dd>Chromeo</dd>
+                <dd>Common</dd>
+                <dd>Converge</dd>
+                <dd>Crystal Castles</dd>
+                <dd>Cursive</dd>
+            </div>
+            <div>
+                <dt>E</dt>
+                <dd>Explosions In The Sky</dd>
+            </div>
+            <div>
+                <dt>T</dt>
+                <dd>Ted Leo &amp; The Pharmacists</dd>
+                <dd>T-Pain</dd>
+                <dd>Thrice</dd>
+                <dd>TV On The Radio</dd>
+                <dd>Two Gallants</dd>
+            </div>
+        </dl>
+    </div>
+
+    <!-- 
+        css-tricks positioning article:
+        static: 
+        >> Different elements don’t have different default values for positioning, they all start out as static
+        >> it just means that the element will flow into the page as it normally would
+
+        relative: 
+        >> it introduces the ability to use z-index on that element, which doesn’t work with statically positioned elements
+        >> ven if you don’t set a z-index value, this element will now appear on top of any other statically positioned element
+        >> You can’t fight it by setting a higher z-index value on a statically positioned element
+        >> other thing that happens is it limits the scope of absolutely positioned child elements
+            >> Any element that is a child of the relatively positioned element can be absolutely positioned within that block
+        
+        absolute: 
+        >> This is a very powerful type of positioning that allows you to literally place any page element exactly where you want it
+        >> You use the positioning attributes top, left, bottom, and right to set the location
+        >> Remember that these values will be relative to the next parent element with relative (or absolute) positioning
+        >> If there is no such parent, it will default all the way back up to the <html> element itself meaning it will be placed relative to the page itself
+        
+        fixed: 
+        >> A fixed position element is positioned relative to the viewport, or the browser window itself
+        >> viewport doesn’t change when the window is scrolled, so a fixed positioned element will stay right where it is when the page is scrolled
+        >> concern with fixed positioning is that it can cause situations where the fixed element overlaps content such that is is inaccessible
+        >> having enough space to avoid overlaps, does help
+
+        sticky: 
+        >> A sticky element will just sit there like a static element, but as you scroll past it, if it’s parent element has room (usually: extra height) the sticky element will behave as if it’s fixed until that parent element is out of room
+     -->
+
+     <!-- 
+         KP's article on position
+
+         difference between stucky and fixed position:
+         >> fixed generally means fixed to the viewport
+            >> You tell it where to position itself, and it stays there as the user scrolls
+            >> It is out of the flow of the rest of the document
+        >> sticky scrolls along like anything else until it reaches the offset that you set. At that point, it acts like it’s fixed.
+            >> There is a catch though, it must stay within it’s containing block (it’s parent)
+            >> Once that containing block scrolls off the page, it leaves with it
+
+        When to use fixed:
+        >> we want to use fixed when it must always be on the same place on the page at all times
+        >> Using it takes that element out of the document flow
+
+        When to use sticky: 
+        >> You’ll want to use sticky when you want something to scroll into view and then stop once it reaches a certain point
+        >> Keep in mind that it stays within its parent, so once the parent scrolls off, it’s gone
+      -->
+</body>
+
+</html>
