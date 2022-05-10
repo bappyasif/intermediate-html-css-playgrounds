@@ -195,6 +195,63 @@
         element.style.setProperty("--my-var", jsVar + 4);
 
      -->
+
+     <!-- 
+        article how browsers work: some excerpt
+
+        sharing style data:
+        >> elements must be in the same mouse state (e.g., one can't be in :hover while the other isn't)
+        >> Neither element should have an id
+        >> tag names should match
+        >> class attributes should match
+        >> set of mapped attributes must be identical
+        >> link states must match
+        >> focus states must match
+        >> Neither element should be affected by attribute selectors, where affected is defined as having any selector match that uses an attribute selector in any position within the selector at all
+        >> There must be no inline style attribute on the elements
+        >> There must be no sibling selectors in use at all
+            >> WebCore simply throws a global switch when any sibling selector is encountered and disables style sharing for the entire document when they are present
+            >> This includes the + selector and selectors like :first-child and :last-child
+        
+        Style sheet cascade order
+        >> Browser declarations
+        >> User normal declarations
+        >> Author normal declarations
+        >> Author important declarations
+        >> User important declarations
+
+        >> browser declarations are least important and the user overrides the author only if the declaration was marked as important
+        >> Declarations with the same order will be sorted by specificity and then the order they are specified
+
+
+        Selector speceficity:
+        >> count 1 if the declaration it is from is a 'style' attribute rather than a rule with a selector, 0 otherwise (= a)
+        >> count the number of ID attributes in the selector (= b)
+        >> count the number of other attributes and pseudo-classes in the selector (= c)
+        >> count the number of element names and pseudo-elements in the selector (= d)
+        
+        layout process: ususlaly has following pattern: 
+        >> Parent renderer determines its own width
+        >> Parent goes over children and: 
+            >> Place the child renderer (sets its x and y)
+            >> Calls child layout if needed–they are dirty or we are in a global layout, or for some other reason–which calculates the child's height
+        >> Parent uses children's accumulative heights and the heights of margins and padding to set its own height–this will be used by the parent renderer's parent
+        >> Sets its dirty bit to false
+
+        Width calculation: 
+        >> renderer's width is calculated using the container block's width, the renderer's style "width" property, the margins and borders
+            >> container width is the maximum of the containers availableWidth and 0
+            >> availableWidth in this case is the contentWidth which is calculated as: clientWidth() - paddingLeft() - paddingRight()
+            >> clientWidth and clientHeight represent the interior of an object excluding border and scrollbar
+            >> elements width is the "width" style attribute
+                >> It will be calculated as an absolute value by computing the percentage of the container width
+            >> horizontal borders and paddings are now added
+            >> So far this was the calculation of the "preferred width". Now the minimum and maximum widths will be calculated
+            >> If the preferred width is greater then the maximum width, the maximum width is used
+            >> If it is less then the minimum width (the smallest unbreakable unit) then the minimum width is used
+            >> values are cached in case a layout is needed, but the width does not change
+
+      -->
 </body>
 
 </html>
