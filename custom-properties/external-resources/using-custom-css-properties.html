@@ -196,7 +196,7 @@
 
      -->
 
-     <!-- 
+    <!-- 
         article how browsers work: some excerpt
 
         sharing style data:
@@ -308,6 +308,44 @@
         >> viewport has outer stack
         >> if z-index property is higher, so it is more forward in the stack held by the root box
       -->
+
+    <!-- 
+          article on Css Preprocessors (some keypoints)
+          
+          sass vs less vs stylus:
+
+          Sass:
+          Syntax Declaration: Sass vs SCSS: 
+          >> SCSS stands for Sassy CSS. Unlike Sass, SCSS is not based on indentation
+          >> .sass extension is used as original syntax for Sass, while SCSS offers a newer syntax with .scss extension
+          >> Unlike Sass, SCSS has curly braces and semicolons, just like CSS
+          >> Contrary to SCSS, Sass is difficult to read as it is quite deviant from CSS
+            >> Which is why SCSS it the more recommended Sass syntax as it is easier to read and closely resembles Native CSS while at the same time enjoying with power of Sass
+          
+        Less: Leaner style sheet
+        >> One of the few disadvantages of LESS over Sass is that it does not support functions
+        >> Unlike Sass, LESS uses @ to declare variables which might cause confusion with @media and @keyframes
+        >> However, One key advantage of LESS over Sass and Stylus or any other preprocessors, is the ease of adding it in your project (e.g. with npm or less.js file)
+        Syntax Declaration: LESS: 
+        >> Uses .less extension
+        >> yntax of LESS is quite similar to SCSS with the exception that for declaring variables, instead of $ sign, LESS uses @
+
+        Stylus: 
+        >> One advantage of Stylus over Sass or LESS is that it is armed with extremely powerful built-in functions and is capable of handling heavy computing
+        Syntax Declaration: Stylus: 
+        >> Uses .styl extension
+        >> Stylus offers a great deal of flexibility in writing syntax, supports native CSS as well as allows omission of brackets colons and semicolons
+        >> Stylus does not use @ or $ symbols for defining variables
+            >> Instead, Stylus uses the assignment operators to indicate a variable declaration
+        
+        >> One advantage of using Native CSS Custom Property Variable over Sass or LESS variable is that they are updated dynamically instead of after being compiled
+        >> Native CSS also offers calc() functionality to perform calculations for property value
+            >> Coupled with CSS custom property variable it can prove to be quite useful
+        >> All three Preprocessors have almost similar features and functionalities
+        >> While Sass has the largest user base and active community, LESS is the easiest to compile and integrate
+        >> On the other hand, Stylus is still a popular choice for Node JS developers as it combines the extensive logical prowess of Sass with the simplicity of LESS
+
+       -->
 </body>
 
 </html>
