@@ -251,6 +251,62 @@
             >> If it is less then the minimum width (the smallest unbreakable unit) then the minimum width is used
             >> values are cached in case a layout is needed, but the width does not change
 
+        Painting order: 
+        >> This is actually the order in which the elements are stacked in the stacking contexts
+        >> This order affects painting since the stacks are painted from back to front
+        >> stacking order of a block renderer is: 
+            >> background color
+            >> background image
+            >> border
+            >> children
+            >> outline
+        
+        Dynamic changes: 
+        >> browsers try to do the minimal possible actions in response to a change
+            >> changes to an element's color will cause only repaint of the element
+            >> Changes to the element position will cause layout and repaint of the element, its children and possibly siblings
+            >> Adding a DOM node will cause layout and repaint of the node
+            >> Major changes, like increasing font size of the "html" element, will cause invalidation of caches, relayout and repaint of the entire tree
+
+        Positioning scheme: 
+        >> There are three schemes:
+            >> Normal: 
+                >> object is positioned according to its place in the document
+                >> This means its place in the render tree is like its place in the DOM tree and laid out according to its box type and dimensions
+            >> Float: 
+                >> object is first laid out like normal flow, then moved as far left or right as possible
+            >> Absolute: 
+                >> object is put in the render tree in a different place than in the DOM tree
+        >> positioning scheme is set by the "position" property and the "float" attribute
+        >> static and relative cause a normal flow
+        >> absolute and fixed cause absolute positioning
+        >> In static positioning no position is defined and the default positioning is used
+        >> In the other schemes, the author specifies the position: top, bottom, left, right
+        >> way the box is laid out is determined by: 
+            >> Box type
+            >> Box dimensions
+            >> Positioning scheme
+            >> External information such as image size and the size of the screen
+        
+        Box types: 
+        >> block box: 
+            >> forms a block–has its own rectangle in the browser window
+        >> inline box: 
+            >> does not have its own block, but is inside a containing block
+        >> Blocks are formatted vertically one after the other
+        >> Inlines are formatted horizontally
+            >> If the container width is not enough, the inlines will be put on several lines
+        
+        Layered representation: 
+        >> This is specified by the z-index CSS property
+        >> It represents the third dimension of the box: its position along the "z axis"
+        >> boxes are divided into stacks (called stacking contexts)
+        >> In each stack the back elements will be painted first and the forward elements on top, closer to the user
+        >> In case of overlap the foremost element will hide the former element
+        >> stacks are ordered according to the z-index property
+        >> Boxes with "z-index" property form a local stack
+        >> viewport has outer stack
+        >> if z-index property is higher, so it is more forward in the stack held by the root box
       -->
 </body>
 
