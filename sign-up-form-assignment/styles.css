@@ -1,0 +1,145 @@
+@font-face {
+    font-family: "norse-bold";
+    src: url('./Norse-Bold.otf');
+}
+
+body {
+    margin: 0;
+}
+
+main {
+    display: flex;
+    overflow: hidden;
+}
+
+.left-side {
+    height: 100vh;
+    font-family: "norse-bold";
+    position: relative;
+}
+
+.left-side .overlay-div {
+    position: absolute;
+    color: white;
+    font-size: xxx-large;
+    top: 31vh;
+    width: -webkit-fill-available;
+    background-color: rgba(24, 24, 21, 0.6);
+    text-align: center;
+    padding: 20px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.left-side .overlay-div > img {
+    height: 13vh;
+}
+
+.left-side > img {
+    width: 42vw;
+    height: 100%;
+}
+
+.right-side {
+    margin: 13vh 2vw 0;
+}
+
+.form-container {
+    /* border: gainsboro solid; */
+    border-left: none;
+    border-right: none;
+    /* box-shadow: 11px 1.1px 116px 1.1px gainsboro; */
+}
+
+.form-container h2 {
+    margin: 0;
+    margin: 17px 0;
+}
+
+form {
+    background-color: transparent;
+}
+
+form > div {
+    /* box-shadow: 11px 1.1px 116px 1.1px gainsboro; */
+    border-top: solid gainsboro;
+    border-bottom: solid gainsboro;
+    box-shadow: aliceblue 0px 6px 2px;
+    margin-bottom: 36px;
+}
+
+form div div {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    /* width: 60vw; */
+    background-color: transparent;
+    /* border: none;
+    box-shadow: none; */
+    /* box-shadow: 11px 1.1px 116px 1.1px gainsboro; */
+}
+
+form fieldset {
+    width: 24vw;
+    border: none;
+    margin: 0;
+    padding: 0;
+    font-size: x-large;
+    margin-bottom: 11px;
+}
+
+form fieldset label {
+    text-transform: uppercase;
+    color: darkslategray;
+    font-weight: 800;
+}
+
+form fieldset input {
+    width: -webkit-fill-available;
+    font-size: x-large;
+    border-radius: 4px;
+    border: none;
+    outline: solid 1.1px #E5E7EB;
+}
+
+form fieldset input:focus {
+    outline: solid darkslategray 1.1px;
+    box-shadow: 0px 4.2px 0px 1.1px darkslategray;
+}
+
+form fieldset input:invalid {
+    /* outline: solid red 1.1px; */
+}
+
+form fieldset input[type='password']:focus:required {
+    /* outline: solid red 1.1px;
+    box-shadow: 0px 4.2px 0px 1.1px red; */
+}
+
+form > .password-error {
+    outline: solid red 1.1px;
+    box-shadow: 0px 4.2px 0px 1.1px red;
+}
+
+button {
+    margin: 0;
+    padding: 0;
+    width: 13vw;
+    line-height: 2em;
+    font-size: x-large;
+    background-color: #596D48;
+    border: none;
+    outline: 2px solid gainsboro;
+    border-radius: 11px;
+    color: whitesmoke;
+}
+
+#account-check {
+    font-size: x-large;
+    margin: 33px 0 0;
+}
+
+#account-check strong {
+    color: red;
+}
