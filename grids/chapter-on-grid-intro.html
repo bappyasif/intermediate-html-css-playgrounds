@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grid Basics</title>
+</head>
+
+<body>
+    <!-- 
+        >> While Flexbox allows you to build a layout of rows and columns together, it isn’t always easy
+        >> But setting up a two-dimensional layout of cards would be much simpler using CSS Grid:
+     -->
+    <div class="grid-intro">
+        <style>
+            .grid-container {
+                display: grid;
+                grid-template-columns: 75px 75px 75px;
+                grid-template-rows: 75px 75px;
+                gap: 29px;
+            }
+
+            .card {
+                background-color: peachpuff;
+                border: 1px solid red;
+            }
+        </style>
+        <div class="grid-container">
+            <div class="card"></div>
+            <div class="card"></div>
+            <div class="card"></div>
+            <div class="card"></div>
+            <div class="card"></div>
+            <div class="card"></div>
+        </div>
+    </div>
+
+    <!-- 
+        What the Grid?
+        >> Grid is often praised for easy placement of items in a two-dimensional layout
+        >> But Grid can be used for one-dimensional layouts too
+        >> One advantage for developers is if they start off with only one row of items, they can simply add additional rows later
+        >> a lot of similarities between Flex and Grid
+            >> Both use parent containers with child items
+            >> They have similar property names for alignment and positioning
+        >> One of the big highlights for CSS Grid was the use of the gap property
+            >> This used to only be available to Grid, but is now supported with Flex too
+        >> not only do each of these modules have their own use cases, but you will also find it helpful to pair Flex and Grid together
+     -->
+
+    <!-- 
+        differences between flexbox and grid layout: 
+        >> Flexbox can optionally wrap
+            >> If we allow a flex container to wrap, they will wrap down onto another row when the flex items fill a row
+            >> Where they line up on the next row is independent of what happenned on the first row, allowing for a masonry-like look
+
+            >> Grid can also optionally wrap (if we allow auto filling) in the sense that items can fill a row and move to the new row (or auto place themselves)
+            >> but as they do, they will fall along the same grid lines all the other elements do
+        
+        >> You could think of flexbox as “one dimensional”
+            >> While flexbox can make rows and columns in the sense that it allows elements to wrap
+            >> there’s no way to declaratively control where elements end up since the elements merely push along a single axis and then wrap or not wrap accordingly
+            >> and it’s because of that single dimension that we can optionally do things, like align elements along a baseline 
+            >> which is something grid is unable to do
+
+        >> You could think of grid as “two dimensional“
+            >> we can (if we want to) declare the sizing of rows and columns and then explicitly place things into both rows and columns as we choose
+        
+        >> Grid is mostly defined on the parent element
+            >> In flexbox, most of the layout (beyond the very basics) happen on the children
+        
+        >> Grid is better at overlapping
+            >> Getting elements to overlap in flexbox requires looking at traditional stuff, like negative margins, transforms, or absolute positioning in order to break out of the flex behavior
+            >> With grid, we can place items on overlapping grid lines, or even right within the same exact grid cells
+
+        >> Grid is sturdier
+            >> While the flexing of flexbox is sometimes its strength, the way a flex item is sized gets rather complicated
+                >> It’s a combination of width, min-width, max-width, flex-basis, flex-grow, and flex-shrink, not to mention the content inside and things like white-space, as well as the other items in the same row
+            >> Grid has interesting space-occupying features, like fractional units, and the ability for content to break grids, 
+                >> though, generally speaking, we’re setting up grid lines and placing items within them that plop right into place
+            
+        >> Flexbox can push things away
+            >> It’s a rather unique feature of flexbox that you can, for example, put margin-right: auto; on an element 
+            >> and, if there is room, that element will push everything else as far away as it can go can
+      -->
+
+    <!-- 
+          Grid
+
+          >> We can think about CSS Grid in terms of a container and items
+          >> Simply put, when you make an element a grid container, it will “contain” the whole grid
+          >> In CSS, an element is turned into a grid container with the property display: grid or display: inline-grid
+          >> What’s easy about CSS Grid is that you don’t have to assign each child element a property
+          >> Note that only the direct child elements will become grid items
+          >> If we had another element as a child under one of these child elements it would not be a grid item
+          >> grid items can also be grid containers
+
+          Lines and Tracks in Grids
+
+          >> A lot of resources on CSS Grid like to show you boxes and outlined grid tables right from the start
+          >> But if your grid container and grid items don’t have any borders you won’t actually see these lines on the page
+
+          Columns and Rows
+
+          >> to specefy columns and rows will define the grid track (the space between lines on a grid)
+          >> grid-template-columns and grid-template-rows make defining column and row tracks easy
+          >> we could set a column track to give us space between our columns and a row track to give us space between our rows
+          >> columns and rows can have px, percentage and franctional units too
+          >> CSS Grid also includes a shorthand property for defining rows and columns
+            >> we can replace the properties for grid-template-rows and grid-template-columns with the shorthand grid-template property
+            >> e.g. grid-template: 50px 50px / 50px 50px 50px; 
+            >> rows are defined before the slash and columns are defined after the slash
+          
+          Explicit vs Implicit Grid
+
+          >> implicit grid concept it's how CSS Grid is able to automatically place grid items when we haven’t explicitly defined the layout for them
+          >> When we use the grid-template-columns and grid-template-rows properties, we are explicitly defining grid tracks to lay out our grid items
+          >> But when the grid needs more tracks for extra content, it will implicitly define new grid tracks
+          >> Additionally, the size values established from our grid-template-columns or grid-template-rows properties are not carried over into these implicit grid tracks
+            >> But we can define values for the implicit grid tracks
+          >> We can set the implicit grid track sizes using the grid-auto-rows and grid-auto-columns properties
+            >> In this way we can ensure any new tracks the implicit grid makes for extra content are set at values that we defined
+          >> By default, CSS Grid will add additional content with implicit rows
+            >> This means the extra elements would keep being added further down the grid in a vertical fashion.
+          >> It would be much less common to want extra content added horizontally along the grid, but that can be set using the grid-auto-flow: column property and those implicit track sizes can be defined with the grid-auto-columns property
+
+          Gap
+
+          >> gap between grid rows and columns is known as the gutter or alley
+          >> Gap sizes can be adjusted separately for rows and columns using the column-gap and row-gap properties
+          >> Furthermore, we can use a shorthand property called gap to set both row-gap and column-gap
+
+       -->
+</body>
+
+</html>
