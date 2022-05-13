@@ -117,9 +117,25 @@ form fieldset input[type='password']:focus:required {
     box-shadow: 0px 4.2px 0px 1.1px red; */
 }
 
-form > .password-error {
+form #u-password {
+    margin-bottom: 6px;
+}
+
+form .password-error {
     outline: solid red 1.1px;
     box-shadow: 0px 4.2px 0px 1.1px red;
+}
+
+form .error-msg {
+    color: red;
+    display: flex;
+    align-items: baseline;
+    text-align: justify;
+}
+
+form .error-msg::before {
+    content: '*';
+    margin: 6px 8px 0 0;
 }
 
 button {

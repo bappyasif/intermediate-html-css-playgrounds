@@ -7,6 +7,12 @@ let spanElem = document.querySelector('#error-msg')
 let showError = () => {
     confirmPass.addEventListener('input', () => {
         // spanElem.textContent = '';
+        // passElem.setCustomValidity('')
+        
+        spanElem.style.visibility = 'visible';
+        spanElem.classList.add('error-msg')
+        passElem.classList.add('password-error');
+
         if (passElem.value != confirmPass.value) {
             passElem.setCustomValidity('password do not match');
             spanElem.style.visibility = 'visible'
@@ -23,17 +29,25 @@ let showError = () => {
             passElem.setCustomValidity(`password length too short ${passElem.value.length}, length must be greater than or equal to 6`);
             spanElem.textContent = 'password length too short, length must be greater than or equal to 6'
             console.log('drie', passElem.validity, confirmPass.value, passElem.value)
+        } else {
+            // spanElem.textContent = ' '
+            spanElem.style.visibility = 'hidden'
+            passElem.setCustomValidity('')
+            passElem.classList.remove('password-error')
+            spanElem.classList.remove('error-msg')
         }
-        spanElem.style.visibility = 'visible'
+        // spanElem.style.visibility = 'visible'
     });
 }
 
 
 formElem.addEventListener('submit', (event) => {
-    if (!(passElem.validity.valid || confirmPass.validity.valid || passElem.value != confirmPass.value)) {
+    if (!(passElem.validity.valid || confirmPass.validity.valid)) {
         showError();
         event.preventDefault();
     } else {
+        // spanElem.textContent = ''
+        passElem.setCustomValidity('')
         alert('veel success!!')
         spanElem.style.visibility = 'hidden'
     }
