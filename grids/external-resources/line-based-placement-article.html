@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Line based placement with css grid layout</title>
+</head>
+
+<body>
+    <!-- 
+        >> when you use grid layout you always have numbered lines
+        >> lines are numbered for columns and rows, and are indexed from 1
+            >> grid is indexed according to the writing mode of the document
+            >> In a left to right language such as English line 1 is on the left-hand side of the grid
+            >> In a right to left language such as English line 1 is on the right-hand side of the grid
+        >> 
+     -->
+    <div class="basic-example">
+        <!-- 
+            >> As a very simple example we can take a grid with 3 column tracks and 3 row tracks 
+            >> This gives us 4 lines in each dimension
+            >> Inside our grid container we have four child elements
+            >> If we do not place these on to the grid in any way they will lay out according to the auto-placement rules, one item in each of the first four cells
+        -->
+        <style>
+            .basic-example>.wrapper {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                grid-template-rows: repeat(3, 100px);
+            }
+
+            .wrapper>div {
+                border: solid gainsboro;
+            }
+        </style>
+        <div class="wrapper">
+            <div class="box1">One</div>
+            <div class="box2">Two</div>
+            <div class="box3">Three</div>
+            <div class="box4">Four</div>
+        </div>
+    </div>
+
+    <!-- 
+        Positioning items by line number: 
+        >> We can use line-based placement to control where these items sit on the grid
+        
+        grid-column and grid-row shorthands: 
+        >> grid-column-start and grid-column-end properties can be combined into grid-column, grid-row-start and grid-row-end into grid-row
+
+        Default spans:
+        >> if an item only spans one track you can omit the grid-column-end or grid-row-end value
+        >> Grid defaults to spanning one track
+
+        grid-area property: 
+        >> We can take things a step further and define each area with a single property – grid-area
+        >> order of the values for grid-area are as follows: 
+            >> grid-row-start
+            >> grid-column-start
+            >> grid-row-end
+            >> grid-column-end
+        >> This order of values for grid-area can seem a little strange, it is the opposite of the direction in which we specify margins and padding as a shorthand for example
+        >> It may help to realize that this is due to grid using the flow-relative directions defined in the CSS Writing Modes specification
+     -->
+    <div class="line-number">
+        <style>
+            .line-number>.wrapper {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                grid-template-rows: repeat(3, 100px);
+            }
+
+            /* 
+                >> We would like the first item to start on the far left of the grid and span a single column track
+                >> It should also start on the first row line, at the top of the grid and span to the fourth row line
+             */
+            .line-number>.wrapper>.box1 {
+                /* grid-column-start: 1;
+                grid-column-end: 2;
+                grid-row-start: 1;
+                grid-row-end: 4; */
+
+                /* using shorthands */
+                /* grid-column: 1 / 2;
+                grid-row: 1 / 4; */
+
+                /* default spans longhand */
+                /* grid-column-start: 1;
+                grid-row-start: 1;
+                grid-row-end: 4; */
+
+                /* default spans shorthand */
+                /* grid-column: 1;
+                grid-row: 1 / 4; */
+
+                /* using grid-area */
+                grid-area: 1 / 1 / 4 / 2;
+            }
+
+            /* 
+                >> As you position some items, other items on the grid will continue to be laid out using the auto-placement rules
+                >> Addressing each item individually we can place all four items spanning row and column tracks
+                >> we can leave cells empty if we wish
+                >> One of the very nice things about Grid Layout is the ability to have white space in our designs without having to push things around using margins to prevent floats from rising up into the space we have left
+             */
+            .line-number>.wrapper>.box2 {
+                /* grid-column-start: 3;
+                grid-column-end: 4;
+                grid-row-start: 1;
+                grid-row-end: 3; */
+
+                /* using shorthand */
+                /* grid-column: 3 / 4;
+                grid-row: 1 / 3; */
+
+                /* using default spans longhand */
+                /* grid-column-start: 3;
+                grid-row-start: 1;
+                grid-row-end: 3; */
+
+                /* using default spans shorthand */
+                /* grid-column: 3;
+                grid-row: 1 / 3; */
+
+                /* using grid-area */
+                grid-area: 1 / 3 / 3 / 4;
+            }
+
+            .line-number>.wrapper>.box3 {
+                /* grid-column-start: 2;
+                grid-column-end: 3;
+                grid-row-start: 1;
+                grid-row-end: 2; */
+
+                /* using shorthand */
+                /* grid-column: 2 / 3;
+                grid-row: 1 / 2; */
+
+                /* deafualt spans longhand */
+                /* grid-column-start: 2;
+                grid-row-start: 1;
+                grid-row-end: 2; */
+
+                /* default spans shorthand */
+                /* grid-column: 2;
+                grid-row: 1 / 2; */
+
+                /* using grid-area */
+                grid-area: 1 / 2 / 2 / 3;
+            }
+
+            .line-number>.wrapper>.box4 {
+                /* grid-column-start: 2;
+                grid-column-end: 4;
+                grid-row-start: 3;
+                grid-row-end: 4; */
+
+                /* using shorthand */
+                /* grid-column: 2 / 4;
+                grid-row: 3 / 4; */
+
+                /* default spans longhand */
+                /* grid-column-start: 2;
+                grid-column-end: 4;
+                grid-row-start: 3; */
+
+                /* default spans shorthand */
+                /* grid-column: 2 / 4;
+                grid-row: 3; */
+
+                /* using grid-area */
+                grid-area: 3 / 2 / 4 / 4;
+            }
+        </style>
+        <div class="wrapper">
+            <div class="box1">One</div>
+            <div class="box2">Two</div>
+            <div class="box3">Three</div>
+            <div class="box4">Four</div>
+        </div>
+    </div>
+
+    <!-- 
+        Counting backwords: 
+        >> We can also count backwards from the block and inline end of the grid
+            >> for English that would be the right-hand column line and final row line
+            >> These lines can be addressed as -1, and you can count back from there – so the second last line is -2
+            >> It is worth noting that the final line is the final line of the explicit grid
+            >> grid defined by grid-template-columns and grid-template-rows, and does not take into account any rows or columns added in the implicit grid outside of that
+        
+        >> Stretching an item across the grid: 
+        >> Being able to address the start and end lines of the grid is useful as you can then stretch an item right across the grid with:
+            >> .item { grid-column: 1 / -1; }
+    Gutters or Alleys:
+        >> CSS Grid Specification includes the ability to add gutters between column and row tracks with the column-gap and row-gap properties
+        >> These specify a gap that acts much like the column-gap property in multi-column layout
+        >> Gaps only appear between tracks of the grid, they do not add space to the top and bottom, left or right of the containe
+     -->
+    <div class="counting-backwords">
+        <style>
+            .counting-backwords>.wrapper {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                grid-template-rows: repeat(3, 100px);
+            }
+
+            .counting-backwords>.wrapper>.box1 {
+                grid-column-start: -1;
+                grid-column-end: -2;
+                grid-row-start: -1;
+                grid-row-end: -4;
+            }
+
+            .counting-backwords>.wrapper>.box2 {
+                grid-column-start: -3;
+                grid-column-end: -4;
+                grid-row-start: -1;
+                grid-row-end: -3;
+            }
+
+            .counting-backwords>.wrapper>.box3 {
+                grid-column-start: -2;
+                grid-column-end: -3;
+                grid-row-start: -1;
+                grid-row-end: -2;
+            }
+
+            .counting-backwords>.wrapper>.box4 {
+                grid-column-start: -2;
+                grid-column-end: -4;
+                grid-row-start: -3;
+                grid-row-end: -4;
+            }
+        </style>
+        <div class="wrapper">
+            <div class="box1">One</div>
+            <div class="box2">Two</div>
+            <div class="box3">Three</div>
+            <div class="box4">Four</div>
+        </div>
+    </div>
+
+    <!-- 
+        Gutters or Alleys:
+        >> CSS Grid Specification includes the ability to add gutters between column and row tracks with the column-gap and row-gap properties
+        >> These specify a gap that acts much like the column-gap property in multi-column layout
+        >> Gaps only appear between tracks of the grid, they do not add space to the top and bottom, left or right of the container
+
+        gap shorthand: 
+        >> two properties can also be expressed as a shorthand, gap
+        >> If you only give one value for gap it will apply to both column and row gaps
+        >> If you specify two values, the first is used for row-gap and the second for column-gap
+        >> In terms of line-based positioning of items, the gap acts as if the line has gained extra width
+        >> Anything starting at that line starts after the gap and you cannot address the gap or place anything into it
+        >> If you want gutters that act more like regular tracks you can of course define a track for the purpose instead
+
+        using span keyword:
+        >> In addition to specifying the start and end lines by number, you can specify a start line and then the number of tracks you would like the area to span
+        >> You can also use the span keyword in the value of grid-row-start/grid-row-end and grid-column-start/grid-column-end
+
+        >> Remember that if you do not place all of the items, any leftover items will be placed according to auto-placement rules
+        >> remember that items on the grid can overlap each other when you place them explicitly like this
+     -->
+    <div class="gutters-alleys">
+        <style>
+            .gutters-alleys>.wrapper>.box1 {
+                grid-column: 1;
+                /* grid-row: 1 / 4; */
+
+                /* using span */
+                grid-row: 1 / span 3;
+            }
+
+            .gutters-alleys>.wrapper>.box2 {
+                grid-column: 3;
+                /* grid-row: 1 / 3; */
+
+                /* using span */
+                grid-row: 1 / span 2;
+            }
+
+            .gutters-alleys>.wrapper>.box3 {
+                grid-column: 2;
+                grid-row: 1;
+            }
+
+            .gutters-alleys>.wrapper>.box4 {
+                /* grid-column: 2 / 4; */
+                
+                /* using span */
+                grid-column: 2 / span 2;
+                grid-row: 3;
+            }
+
+            .gutters-alleys>.wrapper {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                grid-template-rows: repeat(3, 100px);
+                /* column-gap: 20px;
+                row-gap: 1em; */
+
+                /* gap shorthand */
+                gap: 1em 20px;
+            }
+        </style>
+        <div class="wrapper">
+            <div class="box1">One</div>
+            <div class="box2">Two</div>
+            <div class="box3">Three</div>
+            <div class="box4">Four</div>
+        </div>
+    </div>
+
+    <!-- 
+        
+     -->
+</body>
+
+</html>

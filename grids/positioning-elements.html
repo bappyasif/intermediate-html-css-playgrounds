@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Positioning grid layout elements</title>
+</head>
+
+<body>
+    <!-- 
+        Reviewing Tracks: 
+        >> when you define a grid using grid-template, you are defining the tracks the grid will have
+        >> You can think of a grid track as any single row or column on a grid
+     -->
+    <div class="reviewing-tracks">
+        <style>
+            .reviewing-tracks>.container {
+                display: grid;
+                grid-template-rows: 100px 100px 100px;
+                grid-template-columns: 100px 100px 100px;
+            }
+
+            .reviewing-tracks>.container>.item {
+                background-color: orange;
+                border: 1px solid black;
+                text-align: center;
+            }
+
+            .reviewing-tracks>.container>.first-row {
+                background-color: pink;
+            }
+
+            .reviewing-tracks>.container>.last-column {
+                background-color: lightblue;
+            }
+        </style>
+        <div class="container">
+            <div class="item first-row">A</div>
+            <div class="item first-row">B</div>
+            <div class="item first-row last-column">C</div>
+            <div class="item">D</div>
+            <div class="item">E</div>
+            <div class="item last-column">F</div>
+            <div class="item">G</div>
+            <div class="item">H</div>
+            <div class="item last-column">I</div>
+        </div>
+    </div>
+
+    <!-- 
+        typo (e.g. this might be our div.container if you are inspecting our CodePen.)
+        Lines: 
+        >> Whenever we create grid tracks, grid lines are created implicitly
+        >> Grid lines are only created after our grid tracks have been defined
+        >> We can not explicitly create grid lines
+        >> Every track has a start line and an end line
+        >> lines are numbered from left to right and top to bottom starting at 1
+        >> Grid lines are what we use to position grid items
+
+        Cells: 
+        >> Cells are the smallest unit of measurement in a grid
+        >> You can think of grid cells like a cell in a spreadsheet or a square on a graph
+        >> By default each child element of a grid container will occupy one cell
+        
+        Positioning: 
+        >> To get a feel for how items can be positioned we will create a mock floor plan for an apartment
+        >> Let’s start with a total area of our apartment (the grid container) divided into a 5x5 grid
+        >> To make this example a little clearer, we’ll use a background color to distinguish our container space
+        >> Note that we’re also using display: inline-grid here so that our container does not stretch to take up space the way a block-level box would
+        >> We positioned this item (#living-room) using grid-column-start and grid-column-end
+            >> Their property values represent the column grid lines we wish it to start and end with
+            >> Next, we need to use our space more efficiently
+            >> We will make the rest of our rooms span multiple grid cells and fill out the rest of our apartment
+        >> These properties allow us to use our existing grid lines to tell items how many rows and columns each item should span across
+        >> grid-column is just a combination of grid-column-start and grid-column-end with a slash between the two values
+        >> And grid-row is the shorthand version for setting an item’s row positioning
+        >> change the starting and ending positions for the bathroom, bedroom and closet so that the bathroom is right next to the kitchen        
+     -->
+    <div class="positioning-example">
+        <style>
+            .positioning-example>.container {
+                display: inline-grid;
+                grid-template: 40px 40px 40px 40px 40px / 40px 40px 40px 40px 40px;
+                background-color: lightblue;
+            }
+
+            .positioning-example>.container>.room {
+                border: 1px solid;
+                font-size: 50%;
+                text-align: center;
+            }
+
+            .positioning-example>.container>#living-room {
+                /* grid-column-start: 1;
+                grid-column-end: 6;
+                grid-row-start: 1;
+                grid-row-end: 3; */
+
+                /* using grid-area */
+                grid-area: 1 / 1 / 3 / 6;
+            }
+
+            .positioning-example>.container>#kitchen {
+                grid-column: 4 / 6;
+                grid-row: 3 / 6;
+            }
+
+            .positioning-example>.container>#bedroom {
+                /* 
+                grid-column-start: 2;
+                grid-column-end: 4;
+                 */
+                grid-column-start: 1;
+                grid-column-end: 3;
+                grid-row-start: 3;
+                grid-row-end: 5;
+            }
+
+            .positioning-example>.container>#bathroom {
+                /* 
+                grid-column-start: 1;
+                grid-column-end: 2;
+                 */
+                grid-column-start: 3;
+                grid-column-end: 4;
+                grid-row-start: 3;
+                grid-row-end: 6;
+            }
+
+            .positioning-example>.container>#closet {
+                /* 
+                grid-column-start: 2;
+                grid-column-end: 4;
+                 */
+                grid-column-start: 1;
+                grid-column-end: 3;
+                grid-row-start: 5;
+                grid-row-end: 6;
+            }
+        </style>
+        <div class="container">
+            <div class="room" id="living-room">Living Room</div>
+            <div class="room" id="kitchen">Kitchen</div>
+            <div class="room" id="bedroom">Bedroom</div>
+            <div class="room" id="bathroom">Bathroom</div>
+            <div class="room" id="closet">Closet</div>
+        </div>
+    </div>
+
+    <!-- 
+        grid area: 
+        >> There is an even shorter shorthand for positioning grid items with start and end lines
+        >> You can combine grid-row-start / grid-column-start / grid-row-end / grid-column-end into one line using grid-area
+        >> But grid-area can also refer to a few different things
+        >> Instead of using the grid lines to position all the items in a grid, we can create a visual layout of the grid in words
+            >> To do this we give each item on the grid a name using grid-area
+        >> We can even use . to indicate empty cells
+     -->
+    <div class="using-grid-area">
+        <style>
+            .using-grid-area>.container {
+                display: inline-grid;
+                grid-template: 40px 40px 40px 40px 40px / 40px 40px 40px 40px 40px;
+                background-color: lightblue;
+                grid-template-areas:
+                    "living-room living-room living-room living-room living-room"
+                    "living-room living-room living-room living-room living-room"
+                    "bedroom bedroom bathroom kitchen kitchen"
+                    "bedroom bedroom bathroom kitchen kitchen"
+                    /* "closet closet bathroom kitchen kitchen" */
+
+                    /* . represents empty cell */
+                    "closet closet . . ."
+            }
+
+            .using-grid-area>.container>.room {
+                border: 1px solid;
+                font-size: 50%;
+                text-align: center;
+            }
+
+            .using-grid-area>.container>#living-room {
+                grid-area: living-room;
+            }
+
+            .using-grid-area>.container>#kitchen {
+                grid-area: kitchen;
+            }
+
+            .using-grid-area>.container>#bedroom {
+                grid-area: bedroom;
+            }
+
+            .using-grid-area>.container>#bathroom {
+                grid-area: bathroom;
+            }
+
+            .using-grid-area>.container>#closet {
+                grid-area: closet;
+            }
+        </style>
+        <div class="container">
+            <div class="room" id="living-room">Living Room</div>
+            <div class="room" id="kitchen">Kitchen</div>
+            <div class="room" id="bedroom">Bedroom</div>
+            <div class="room" id="bathroom">Bathroom</div>
+            <div class="room" id="closet">Closet</div>
+        </div>
+    </div>
+</body>
+
+</html>

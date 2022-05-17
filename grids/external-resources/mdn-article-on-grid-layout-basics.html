@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>grid layout basic concepts</title>
+</head>
+
+<body>
+    <!-- 
+        >> CSS Grid Layout introduces a two-dimensional grid system to CSS
+        >> Grids can be used to lay out major page areas or small user interface elements
+
+        What is a grid?
+        >> A grid is a set of intersecting horizontal and vertical lines defining columns and rows
+        >> Elements can be placed onto the grid within these column and row lines
+        >> CSS grid layout has the following features:
+            >> Fixed and flexible track sizes: 
+                >> You can create a grid with fixed track sizes – using pixels for example
+                >> This sets the grid to the specified pixel which fits to the layout you desire
+                >> You can also create a grid using flexible sizes with percentages or with the new fr unit designed for this purpose
+            >> Item placement: 
+                >> You can place items into a precise location on the grid using line numbers, names or by targeting an area of the grid
+                >> Grid also contains an algorithm to control the placement of items not given an explicit position on the grid
+            >> Creation of additional tracks to hold content: 
+                >> You can define an explicit grid with grid layout
+                >> Grid Layout specification is flexible enough to add additional rows and columns when needed
+                >> Features such as adding "as many columns that will fit into a container" are included
+            >> Alignment control: 
+                >> Grid contains alignment features so we can control how the items align once placed into a grid area, and how the entire grid is aligned
+            >> Control of overlapping content: 
+                >> More than one item can be placed into a grid cell or area and they can partially overlap each other
+                >> This layering may then be controlled with the z-index property
+                >> Grid is a powerful specification that, when combined with other parts of CSS such as flexbox, can help you create layouts that were previously impossible to build in CSS
+                >> It all starts by creating a grid in your grid container
+            
+        Grid container: 
+        >> We create a grid container by declaring display: grid or display: inline-grid on an element
+        >> As soon as we do this, all direct children of that element become grid items
+
+        Grid tracks: 
+        >> We define rows and columns on our grid with the grid-template-columns and grid-template-rows properties
+        >> These define grid tracks
+        >> A grid track is the space between any two lines on the grid
+        
+            >> fr unit
+                >> Tracks can be defined using any length unit
+                >> new fr unit represents a fraction of the available space in the grid container
+
+            >> unequal sizes: 
+                >> we can use diffrent sizes in grid layout for column and rows, which will take up only that amount of space
+
+            >> Mixing flexible and absolute sizes: 
+                >> we can mix absolute sized tracks with fr units in a grid layout
+                >> absolute space is taken out from available space, and remaining space will be devided into rest of flexible cells and tracks
+
+            >> Track listings with repeat() notation: 
+                >> Large grids with many tracks can use the repeat() notation, to repeat all or a section of the track listing
+
+            >> implicit and explicit grid: 
+                >> explicit grid consists of any rows and columns defined with grid-template-columns or grid-template-rows
+                >> If you place something outside of the defined grid—or due to the amount of content, more grid tracks are needed—then the grid creates rows and columns in the implicit grid
+                    >> These tracks will be auto-sized by default, resulting in their size being based on the content that is inside them
+                >> You can also define a set size for tracks created in the implicit grid with the grid-auto-rows and grid-auto-columns properties
+
+            >> Track sizing and minmax: 
+                >> When setting up an explicit grid or defining the sizing for automatically created rows or columns we may want to give tracks a minimum size, but also ensure they expand to fit any content that is added
+                    >> For example, I may want my rows to never collapse smaller than 100 pixels, but if my content stretches to 300 pixels in height, then I would like the row to stretch to that height
+                >> Grid has a solution for this with the minmax() function
+                    >> using minmax() in the value of grid-auto-rows
+                    >> Using auto means that the size will look at the content size and will stretch to give space for the tallest item in a cell
+                
+     -->
+    <div class="basic-example">
+        <style>
+            .basic-example>.wrapper {
+                display: grid;
+                /* grid-template-columns: 200px 200px 200px; */
+
+                /*  would create three equal width tracks that grow and shrink according to the available space */
+                /* grid-template-columns: 1fr 1fr 1fr; */
+
+                /* Two parts are given to the first track and one part each to the next two tracks */
+                /* grid-template-columns: 2fr 1fr 1fr; */
+
+                /* first track is 500 pixels, remaining space devided to flexible units */
+                /* grid-template-columns: 500px 1fr 2fr; */
+
+                /* with using repeat() notation */
+                /* grid-template-columns: repeat(3, 1fr); */
+
+                /* Repeat notation can be used for a part of the track listing */
+                /* with an initial 20-pixel track, then a repeating section of 6 1fr tracks then a final 20-pixel track */
+                /* grid-template-columns: 20px repeat(6, 1fr) 20px; */
+
+                /* Repeat notation takes the track listing, and uses it to create a repeating pattern of tracks */
+                /* grid-template-columns: repeat(5, 1fr 2fr); */
+
+                /* imlicit grid use case */
+                /* grid-template-columns: repeat(3, 1fr);
+                grid-auto-rows: 200px; */
+
+                /* automatically created rows will be a minimum of 100 pixels tall, and a maximum of auto */
+                grid-template-columns: repeat(3, 1fr);
+                grid-auto-rows: minmax(100px, auto);
+            }
+
+            .wrapper div {
+                border: solid gainsboro;
+            }
+        </style>
+        <div class="wrapper">
+            <div>One</div>
+            <!-- <div>Two</div> -->
+            <div>Two
+                <p>I have some more content in.</p>
+                <p>This makes me taller than 100 pixels.</p>
+            </div>
+            <div>Three</div>
+            <div>Four</div>
+            <div>Five</div>
+        </div>
+    </div>
+
+    <!-- 
+        Grid lines: 
+        >> It should be noted that when we define a grid we define the grid tracks, not the lines
+        >> Grid then gives us numbered lines to use when positioning items
+        >> Lines are numbered according to the writing mode of the document
+            >> In a left-to-right language, line 1 is on the left-hand side of the grid
+            >> In a right-to-left language, it is on the right-hand side of the grid
+        >> Lines can also be named
+
+        >> Positioning items against lines: 
+        >> When placing an item, we target the line – rather than the track
+        >> we can position elements on grid by using the grid-column-start, grid-column-end, grid-row-start and grid-row-end properties
+        >> example: 
+            >> placing the first two items on our three column track grid
+            >> Working from left to right, the first item is placed against column line 1, and spans to column line 4, which in our case is the far-right line on the grid
+            >> It begins at row line 1 and ends at row line 3, therefore spanning two row tracks
+            >> second item starts on grid column line 1, and spans one track
+                >> This is the default so I do not need to specify the end line
+            >> It also spans two row tracks from row line 3 to row line 5
+            >> other items will place themselves into empty spaces on the grid
+        
+        >> Line-positioning shorthands: 
+        >> longhand values used above can be compressed onto one line for columns with grid-column, and one line for rows with grid-row
+            >> by doing so, css becomes less verbose and easy to read
+            >> value before the forward slash character (/) is the start line, the value after the end line
+            >> You can omit the end value if the area only spans one track
+        >> Any space used by gaps will be accounted for before space is assigned to the flexible length fr tracks, and gaps act for sizing purposes like a regular grid track, however you cannot place anything into a gap
+        >> In terms of line-based positioning, the gap acts like a thick line
+     -->
+    <div class="grid-lines">
+        <style>
+            .grid-lines>.wrapper {
+                margin-top: 11px;
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                grid-auto-rows: 100px;
+                /* gutters example */
+                /* column-gap: 10px;
+                row-gap: 1em; */
+                grid-gap: 10px 1em;
+            }
+
+            .grid-lines>.wrapper>.box1 {
+                /* grid-column-start: 1;
+                grid-column-end: 4;
+                grid-row-start: 1;
+                grid-row-end: 3; */
+
+                /* using shorthand */
+                grid-column: 1 / 4;
+                grid-row: 1 / 3;
+            }
+
+            .grid-lines>.wrapper>.box2 {
+                /* grid-column-start: 1;
+                grid-column-end: 2;
+                grid-row-start: 3;
+                grid-row-end: 5; */
+
+                /* using shortyhand */
+                grid-column: 1;
+                grid-row: 3 / 5;
+            }
+        </style>
+        <div class="wrapper">
+            <div class="box1">One</div>
+            <div class="box2">Two</div>
+            <div class="box3">Three</div>
+            <div class="box4">Four</div>
+            <div class="box5">Five</div>
+        </div>
+    </div>
+
+    <!-- 
+        Grid cells: 
+        >> A grid cell is the smallest unit on a grid
+        >> Conceptually it is like a table cell
+        >> once a grid is defined as a parent the child items will lay themselves out in one cell each of the defined grid
+
+        Grid areas: 
+        >> Items can span one or more cells both by row or by column, and this creates a grid area
+        >> Grid areas must be rectangular – it isn't possible to create an L-shaped area for example
+
+        Gutters: 
+        >> Gutters or alleys between grid cells can be created using the column-gap and row-gap properties, or the shorthand gap
+     -->
+
+    <!-- 
+         >> Nesting grids: 
+        >> A grid item can become a grid container
+        >> In this following example, I have the three-column grid that I created earlier, with our two positioned items
+            >> In this case the first item has some sub-items
+            >> As these items are not direct children of the grid they do not participate in grid layout and so display in a normal document flow
+            >> Nesting without subgrid: 
+                >> If I set box1 to display: grid I can give it a track definition and it too will become a grid
+                >> items then lay out on this new grid
+            >> using Subgrid: 
+                >> would let us create nested grids that use the track definition of the parent grid
+                >> in following example to change the track definition of grid-template-columns: repeat(3, 1fr), to grid-template-columns: subgrid
+                >> nested grid will then use the parent grid tracks to layout items
+      -->
+
+    <div class="nesting-grids">
+        <style>
+            .nesting-grids>.wrapper>.box1 {
+                grid-column-start: 1;
+                grid-column-end: 4;
+                grid-row-start: 1;
+                grid-row-end: 3;
+                /* display: grid; */
+                /* grid-template-columns: repeat(3, 1fr); */
+
+                /* using subgrid */
+                display: grid;
+                grid-template-columns: subgrid;
+            }
+
+            * {
+                box-sizing: border-box;
+            }
+
+            .nesting-grids>.wrapper {
+                border: 2px solid #f76707;
+                border-radius: 5px;
+                background-color: #fff4e6;
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .nesting-grids>.box {
+                border: 2px solid #ffa94d;
+                border-radius: 5px;
+                background-color: #ffd8a8;
+                padding: 1em;
+                color: #d9480f;
+            }
+
+            .nesting-grids>.wrapper>.box1 {
+                grid-column: 1 / 4;
+            }
+
+            .nesting-grids>.wrapper>.box1>.nested {
+                border: 2px solid #ffec99;
+                border-radius: 5px;
+                background-color: #fff9db;
+                padding: 1em;
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                grid-column: 1 / 4;
+            }
+        </style>
+        <div class="wrapper">
+            <div class="box1">
+                <div class="nested">
+                    <div class="box">a</div>
+                    <div class="box">b</div>
+                    <div class="box">c</div>
+                </div>
+            </div>
+            <div class="box2">Two</div>
+            <div class="box3">Three</div>
+            <div class="box4">Four</div>
+            <div class="box5">Five</div>
+        </div>
+    </div>
+
+    <!-- 
+        Layering items with z-index:
+        >> Grid items can occupy the same cell, and in this case we can use the z-index property to control the order in which overlapping items stack
+
+        >> Overlapping without z-index: 
+        >> If we return to our example with items positioned by line number, we can change this to make two items overlap
+        >> in this follwoing example, item box2 is now overlapping box1, it displays on top as it comes later in the source order
+
+        >> Controlling the order: 
+        >> We can control the order in which items stack up by using the z-index property\
+        >> If we give box2 a lower z-index than box1 it will display below box1 in the stack.
+     -->
+     
+    <div class="z-index">
+        <style>
+            .z-index>.wrapper {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                grid-auto-rows: 100px;
+            }
+
+            .z-index>.wrapper>.box1 {
+                grid-column-start: 1;
+                grid-column-end: 4;
+                grid-row-start: 1;
+                grid-row-end: 3;
+                /* stacking order */
+                z-index: 2;
+                background-color: #ffa94d;
+            }
+
+            .z-index>.wrapper>.box2 {
+                grid-column-start: 1;
+                grid-row-start: 2;
+                grid-row-end: 4;
+                /* stacking order */
+                z-index: 1;
+                background-color: #d9480f;
+            }
+        </style>
+        <div class="wrapper">
+            <div class="box1">One</div>
+            <div class="box2">Two</div>
+            <div class="box3">Three</div>
+            <div class="box4">Four</div>
+            <div class="box5">Five</div>
+        </div>
+
+    </div>
+</body>
+
+</html>
