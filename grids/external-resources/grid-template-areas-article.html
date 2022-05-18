@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grid Template Areas Layout</title>
+</head>
+
+<body>
+    <!-- 
+        >> grid-template-areas property accepts one or more strings as a value
+        >> Each string (enclosed in quotes) represents a row of your grid
+        >> You can use the property on a grid that you have defined using grid-template-rows and grid-template-columns, or you can create your layout in which case all rows will be auto-sized
+        >> An area is caused to span multiple tracks by repeating the name in all of the cells that you would like it to cover
+        >> following property and value describe a grid with four areas — each spanning two column tracks and two row tracks: 
+        grid-template-areas:"one one two two"
+                            "one one two two"
+                            "three three four four"
+                            "three three four four";
+        >> Items are placed into the layout by being named with an ident using the grid-area property
+        >> Therefore, if I want to place an element with a class of test into the area of the grid named one, I use the following CSS: .test { grid-area: one; }
+        >> in this example belowe, have four items (with classes one to four); these are assigned to the relevant grid area using the grid-area property and therefore display on the grid in the correct boxes
+     -->
+    <div class="grid-area-example-01">
+        <style>
+            .grid-area-example-01>.grid {
+                border: 5px solid rgb(111, 41, 97);
+                display: grid;
+                /* grid-template-areas:
+                    "one one two two"
+                    "one one two two"
+                    "three three four four"
+                    "three three four four"; */
+
+                /* using with empty space */
+                /* grid-template-areas: "one one two two"
+                    "one one two two"
+                    ". . four four"
+                    "three three four four"; */
+
+                gap: 10px;
+                grid-template-columns: repeat(4, 1fr);
+                grid-template-rows: repeat(4, 100px);
+                inline-size: 500px;
+            }
+
+            .grid>* {
+                background-color: rgba(111, 41, 97, .4);
+                border-radius: 5px;
+                padding: 10px;
+            }
+
+            .grid-area-example-01>.grid>.one {
+                /* grid-area: one; */
+
+                /* using grid area shorthand for lines */
+                grid-area: 1 / 1 / 3 / 3;
+            }
+
+            .grid-area-example-01>.grid>.two {
+                /* grid-area: two; */
+
+                /* using grid area shorthand for lines */
+                grid-area: 1 / 3 / 3 / 5;
+            }
+
+            .grid-area-example-01>.grid>.three {
+                /* grid-area: three; */
+
+                /* using grid area shorthand for lines */
+                grid-area: 3 / 1 / 5 / 3;
+            }
+
+            .grid-area-example-01>.grid>.four {
+                /* grid-area: four; */
+
+                /* using grid area shorthand for lines */
+                grid-area: 3 / 3 / 5 / 5;
+            }
+        </style>
+        <div class="grid">
+            <div class="one">1</div>
+            <div class="two">2</div>
+            <div class="three">3</div>
+            <div class="four">4</div>
+        </div>
+    </div>
+
+    <!-- 
+        RULES FOR USING grid-template-areas: 
+        >> There are a few rules when creating a layout in this way
+        >> Breaking the rules will make the value invalid and therefore your layout will not happen
+        >> first rule is that you must describe a complete grid, i.e. every cell on your grid must be filled
+            >> If you do want to leave a cell (or cells) as empty space, you do this by inserting a . or series such as ... with no space between them
+        >> secondly, You can only define each area once, meaning that you can’t use this property to copy content into two places on the grid!
+            >> So the following value would be invalid and cause the entire property to be ignored as we have duplicated the area 'three':
+            grid-template-areas:"one one three three"
+                                "one one two two"
+                                "three three four four"
+                                "three three four four";
+        >> thirdly, You can’t create a non-rectangular area 
+            >> so the property can’t be used to create an ‘L’ or ‘T’ shaped area — making the following value also invalid:
+            grid-template-areas:"one one two two"
+                                "one one one one"
+                                "three three four four"
+                                "three three four four";
+        
+
+        FORMATTING THE STRINGS: 
+        >> It's highly useful to display the value of grid-template-areas as I have above (with each string representing a row below the row before). 
+            >> This gives a visual representation of what the layout will be
+        >> To help with this, it is valuable to add additional whitespace characters between each cell, and also to use multiple . characters denoting empty cells
+        >> below, is an example of usage for multiple whitespace characters between smaller words, and also multiple . characters so the empty cells line up:
+        grid-template-areas:"one   one   two  two"
+                            "one   one   two  two"
+                            "..... ..... four four"
+                            "three three four four";
+        >> That said, it is also completely valid to have all of the strings on one line, so we could write our example as follows: grid-template-areas: "one one two two" "one one two two" "three three four four" "three three four four";
+
+
+        Explaining grid-template-areas And grid-area: 
+        >> reason that each area needs to be a complete rectangle is that it needs to be the same shape that you could create by using line-based placement
+        >> If we stick with our example above, we could make this layout with grid lines, using the longhand grid-column-start, grid-column-end, grid-row-start and grid-row-end properties
+        >> we could also create our layout with the following order of lines:
+            >> grid-row-start
+            >> grid-column-start
+            >> grid-row-end
+            >> grid-column-end
+        >> grid-area property is interesting as it can take line numbers and line names
+        >> It is also important to understand the different way it behaves when in each mode
+
+
+        USING grid-area WITH LINE NUMBERS: 
+        >> If you miss off any values — therefore providing 1, 2 or 3 line numbers — missing values are set to auto which means that the area will span 1 track (that being the default)
+        >> So the following CSS would place an item grid-row-start: 3 with all other values set to auto, therefore, the item would be auto-placed in the first available column track, and span one row track and one column track
+        >> e.g. grid-area: 3;
+
+
+        USING grid-area WITH IDENTS: 
+        >> If you use an ident (which is what a named area is called in Grid Layout), then the grid-area property also takes four lines
+        >> If you have named lines on your grid then you can use these named lines in the same way as numbered lines
+        >> However, what happens when you miss off some lines is different to when you use idents and not numbers
+        >> we are missing the line name for grid-column-end, grid-column-end should use a copy of grid-column-start
+        >> If grid-column-end and grid-column-start are identical, then the end line is thrown away, and essentially the value is set to auto so we span one track as in the numbered version
+        >> same thing happens if we miss off the third value grid-row-end; it becomes the same as grid-row-start and therefore becomes auto
+        >> When we create a named area with the grid-template-areas property, the edge of each area can be referenced by a line name which is the same as the area name you used
+            >> If the line is a -start line, then one resolves to the start end of the column or row
+            >> If it is an -end line, then one resolves to the end line of the column or row
+            >> This means that when we say grid-area: one, we have omitted the last three values for the grid-area shorthand; they all end up being copies of the first value
+                >> i.e. all in our case become one and the item is placed just as with our longhand usage
+     -->
+    <div class="with-idents">
+        <style>
+            .with-idents>.grid {
+                border: 5px solid rgb(111, 41, 97);
+                display: grid;
+
+                gap: 10px;
+                grid-template-columns: [one-start three-start] 1fr 1fr [one-end three-end two-start four-start] 1fr 1fr [two-end four-end];
+                grid-template-rows: [one-start two-start] 100px 100px [one-end two-end three-start four-start] 100px 100px [three-end four-end];
+                ;
+                inline-size: 500px;
+            }
+
+            .with-idents>.grid>.one {
+                /* grid-area: one-start / one-start / one-end / one-end; */
+
+                /* we could take our area named one and place our item using named lines as follows: */
+                grid-row-start: one;
+                grid-row-end: one;
+                grid-column-start: one;
+                grid-row-end: one;
+            }
+
+            .with-idents>.grid>.two {
+                grid-area: two-start / two-start / two-end;
+            }
+
+            .with-idents>.grid>.three {
+                grid-area: three-start / three-start;
+            }
+
+            .with-idents>.grid>.four {
+                grid-area: four-start;
+            }
+        </style>
+        <div class="grid">
+            <div class="one">1</div>
+            <div class="two">2</div>
+            <div class="three">3</div>
+            <div class="four">4</div>
+        </div>
+    </div>
+
+    <!-- 
+        LAYERING ITEMS WHEN USING grid-template-areas: 
+        >> Only one name can occupy each cell when using grid-template-areas, however, you can still add additional items to the grid after doing your main layout in this way
+        >> You can use the line numbers as usual
+        >> area named 'one' has start edge lines named one-start and end edge lines named one-end
+        >> You can then use these implicit line names to place an item on the grid
+            >> This can be useful if you are redefining the grid at different breakpoints as long as you always want the placed item to come after a certain line name
+
+     -->
+    <div class="layering-items">
+        <style>
+            .layering-items>.grid {
+                border: 5px solid rgb(111, 41, 97);
+                display: grid;
+                grid-template-areas:
+                    "one one two two"
+                    "one one two two"
+                    "three three four four"
+                    "three three four four";
+                gap: 10px;
+                grid-template-columns: repeat(4, 1fr);
+                grid-template-rows: repeat(4, 100px);
+                inline-size: 500px;
+            }
+
+            .layering-items>.grid>.one {
+                grid-area: one;
+            }
+
+            .layering-items>.grid>.two {
+                grid-area: two;
+            }
+
+            .layering-items>.grid>.three {
+                grid-area: three;
+            }
+
+            .layering-items>.grid>.four {
+                grid-area: four;
+            }
+
+            .layering-items>.grid>.five {
+                background-color: orange;
+                /* grid-row: 2 / 4;
+                grid-column: 2 / 4; */
+
+                /* with grid line names  */
+                grid-row: one-start / three-end;
+                grid-column: three-start / four-start;
+            }
+        </style>
+        <div class="grid">
+            <div class="one">1</div>
+            <div class="two">2</div>
+            <div class="three">3</div>
+            <div class="four">4</div>
+            <div class="five">5</div>
+        </div>
+    </div>
+
+    <!-- 
+        Using Grid Template Areas In Responsive Design: 
+        >> I often work with building up components in a component library and I find that using grid-template-areas can be helpful in terms of being able to see exactly what a component will look like from the CSS
+        >> In the CSS below, I have defined a single column layout for my component. Next, at a minimum width of 600px, I redefine the number of columns and also the value of grid-template-areas in order to create a layout with two columns
+            >> nice thing about this approach is that anyone looking at this CSS can see how the layout works!
+            .wrapper {
+                background-color: #fff;
+                padding: 1em;
+                display: grid;
+                gap: 20px;
+                grid-template-areas:
+                    "hd"
+                    "bd"
+                    "sd"
+                    "ft";
+            }
+
+            @media (min-width: 600px) {
+                .wrapper {
+                    grid-template-columns: 3fr 1fr;
+                    grid-template-areas:
+                    "hd hd"
+                    "bd sd"
+                    "ft ft";
+                }
+            }
+
+            header { grid-area: hd; }
+            article {grid-area: bd; }
+            aside { grid-area: sd; }
+            footer { grid-area: ft; }
+
+
+        
+        Accessibility:
+        >> You need to be aware when using this method that it is very easy to move things around and cause the problem of disconnecting the visual display from the underlying source order
+        >> Anyone tabbing around the site, or who is watching the screen while having the content spoken, will be using the order that things are in the source
+        >> By moving the display from that order, you could create a very confusing, disconnected experience
+        >> Don’t use this method to move things around without also ensuring that the source is in a sensible order and matching the visual experience
+
+     -->
+</body>
+
+</html>
