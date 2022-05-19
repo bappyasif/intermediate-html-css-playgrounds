@@ -27,7 +27,82 @@
         >> We use the properties gap and padding to establish a “gutter” area to be able to visualize the grid items better
         >> border and background-color are included to make the container look nicer
         >> grid-template-rows and grid-template-columns are used to make two rows and five columns, we manually define each row and column’s track size individually
-            >> which can get tedious, when dealing with numerous number of columns and rows
+            >> which can get tedious, when dealing with numerous number of columns and rows, that's when repeat() snoops in to rescue
+
+        repeat(): 
+        typo >> repeat() is a CSS function available to the CSS Grid template properties that allows us to define a number of rows or columns and the size we want them to be without having to manually type out each individual column’s (or rows) size
+        
+        Fractional units: 
+        typo >> “responsive in some way.” 
+        >> most basic way to make our grid items dynamic is by using fractional units, also known as fr
+        >> fr unit is a way of distributing whatever remaining space is left in the grid
+            >> For example, if we have a four-column grid with a total width of 400px and four grid items each on a column track assigned 1fr as their size, all of the grid items should be given one fraction of that 400px of space, which is 100 pixels
+        >> we can also use different fr units in column / rows declaraions, and thus allowing that amount of relative space to each of them
+            >> For example, if I divide my 5 columns up by giving the first two a track size of 2fr and the remaining three a track size of 1fr, the first two tracks will be given twice as much remaining space as the others
+        >> you can resize grid as alarge as possible, and as small a possible, untill breakpoint value for any grid item, and that breakpoint would be min-content()
+        
+        min-content(): 
+        >> min-content sizing keyword represents the intrinsic minimum width of the content
+        >> For text content this means that the content will take all soft-wrapping opportunities, becoming as small as the longest word
+
+        Minimum and Maximum Track Sizes: min() and max(): 
+        >> When we resize our grid super small, it is reassuring to know that the browser will stop the item from shrinking beyond the min-content value
+        >> but it’s much better for you to explicitly decide as a developer how small and large your content should be, even in the most extreme situations
+        >> Both of these functions will return a value based on the arguments you supply them
+            >> min() will return the smallest of all the values passed in
+            >> max() will return the largest of all the values passed in
+        >> You can supply as many arguments to these functions as you want: e.g. min(100px, 200px, 300px, 400px, 500px)
+        >> when we provide a dynamic value as one of these arguments, we unlock the real potential of these functions, especially in the context of Grid: e.g. min(200px, 50%)
+        >> In realtime, the browser will compare both of these values and apply whichever is smallest to the size of our grid rows or columns
+            >> Essentially, you’re setting a max-height for the track, when dealing with min()
+        >> conversely for max() function browser will select larger values from given values(e.g. 110px or 15%)
+            >> essentially setting a minimum width of our grid column or row size at 110px
+        
+        Dynamic minimum and maximum sizes: 
+        >> minmax:
+            >> minmax() is a CSS function that is specifically used with Grid
+            >> It can only be used with the following CSS properties:
+                >> grid-template-columns, grid-template-rows, grid-auto-columns, grid-auto-rows
+            >> It is a relatively straightforward function that only takes in two arguments:
+                >> minimum size the grid track can be
+                >> maximum size the grid track can be
+            >> Unlike min() and max(), it can make sense to use static values for both arguments
+            >> With our grid-template-columns set with minmax() values, each grid item’s width will grow and shrink with the grid container as it resizes horizontally
+                >> However, as the grid shrinks, the column tracks will stop shrinking at 150px, and as the grid grows, they will stop growing at 200px
+            
+        >> clamp:
+            >> Unlike minmax(), clamp() is a CSS function that can be used anywhere, not just within a grid container
+            >> syntax: clamp(minimum-size, ideal-size, maximum-size)
+            >> What this does is allow our item to resize itself until it reaches one of the minimum or maximum threshold values
+            >> Since clamp()’s purpose is to create a flexibly sized track with constraints, we want to use a dynamic value for the “ideal size” argument, and typically a static size for the minimum and maximum size, although it is possible to use a dynamic value here too
+                >> e.g. width: clamp(500px, 80%, 1000px);
+                >> will render with a width equal to 80% of its parent’s width, unless that number is lower than 500px or higher than 1000px, in which case it will use those numbers as its width
+            >> Using clamp() and minmax() are fantastic methods for making grids more responsive while ensuring we don’t hit critical breakpoints that make our website look bad
+            >> This is imperative when using images and elements that may have a tendency to overflow or render in undesirable ways when pushed to extreme sizes            
+        
+        >> auto-fit and auto-fill: 
+            >> use case: You want to give your grid a number of columns that are flexible based on the size of the grid
+            >> For example: if our grid is only 200px wide, we may only want one column, If it’s 400px wide, we may want two, and so on
+                >> Solving this problem with media queries would be a lot of typing
+                >> Thankfully, auto-fit and auto-fill are here to save the day!
+            >> both of these functions will return “the largest possible positive integer” without the grid items overflowing their container
+            >> real use case of auto-fit and auto-fill comes when we incorporate minmax() into the equation
+            >> With minmax(), we can tell our grid that we want to have as many columns as possible, using the constraints of our minmax() function to determine each column’s size, without it overflowing our grid
+            >> So what’s going on here specifically with repeat(auto-fit, minmax(150px, 1fr));
+                >> Remember that auto-fit will return the highest positive integer without overflowing the grid
+                >> So first, the browser has to know how wide our grid is: in this case, it’s just the window’s width (minus margins) because we didn’t explicitly set it, lets say its 500px
+                >> Second, the browser needs to know how many grid column tracks could possibly fit in that width
+                    >> To do this, it uses the minimum value in our minmax() function, since that will yield the highest number of items, which is 150px
+                    >> If our window is 500px wide, this means our grid will render 3 columns
+                    >> Once the browser has determined how many columns we can fit, it then resizes our columns up to the maximum value allowed by our minmax() function
+                    >> In this case, our max size is 1fr, so all three columns will be given an equal allotment of the space available
+            
+            >> auto-fill: 
+            >> In most cases, auto-fill is going to work exactly the same way as auto-fit
+            >> difference is only noticeable when there are fewer items than can fill up the entirety of the grid row once
+            >> when grid is expanded to a size where another grid item could fit, but there aren’t any left, auto-fit will keep the grid items at their max size
+            >> Using auto-fill, the grid items will snap back down to their min size once the space becomes available to add another grid item, even if there isn’t one to be rendered
+            >> They will continue their pattern of growing to max and snapping back to their min as the grid expands and more room becomes available for new grid tracks
      -->
     <div class="grid-container">
         <style>
@@ -39,8 +114,32 @@
                 padding: 4px;
                 border: 1px solid grey;
                 background-color: skyblue;
-                grid-template-rows: 150px 150px;
-                grid-template-columns: 150px 150px 150px 150px 150px;
+                /* grid-template-rows: 150px 150px; */
+                /* grid-template-columns: 150px 150px 150px 150px 150px; */
+
+                /* using repeat */
+                /* grid-template-columns: repeat(2, 150px);
+                grid-template-rows: repeat(5, 150px); */
+
+                /* using fr */
+                /* grid-template-columns: repeat(2, 1fr); */
+                /* grid-template-rows: repeat(5, 1fr); */
+                /* using different fr proportion */
+                /* grid-template-columns: repeat(2, 2fr) repeat(3, 1fr); */
+
+                /* with min() and max() */
+                /* grid-template-rows: repeat(2, min(200px, 50%));
+                grid-template-columns: repeat(5, max(120px, 15%)); */
+
+                /* using minmax() */
+                grid-template-rows: repeat(2, 1fr);
+                /* grid-template-columns: repeat(5, minmax(150px, 200px)); */
+                /* using clamp() */
+                /* grid-template-columns: repeat(5, clamp(150px, 20%, 200px)); */
+                /* using auto-fit */
+                /* grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); */
+                /* using auto-fill */
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
             }
 
             .grid-item {
@@ -101,7 +200,7 @@
             <img src="https://i.imgur.com/jkwFqfX.png" alt="top logo" />
         </div>
     </div>
-    
+
 </body>
 
 </html>

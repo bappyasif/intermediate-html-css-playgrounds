@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auto-fill vs Auto-fit</title>
+</head>
+
+<body>
+    <!-- 
+        >> media-query-less responsiveness is achieved using the repeat() function and the auto-placement keywords
+        >> repeat() function allows you to repeat columns as many times as needed
+        >> 1fr is what tells the browser to distribute the space between the columns so that each column equally gets one fraction of that space
+            >> That is, they’re all fluid, equal-width columns
+            >> e.g. grid-template-columns: repeat(12, 1fr);
+            >> in this example, always have 12 columns regardless of how wide it is
+            >> is not good enough, as the content will be too squished on smaller viewports
+            >> So we need to start by specifying a minimum width for the columns, making sure they don’t get too narrow
+            >> We can do that using the minmax() function            
+        >> grid-template-columns: 
+            >> e.g. repeat( 12, minmax(250px, 1fr) );
+            >> this will cause overflow in the row
+            >> columns will not wrap into new rows if the viewport width is too narrow to fit them all with the new minimum width requirement, because we’re explicitly telling the browser to repeat the columns 12 times per row
+        >> To achieve wrapping, we can use the auto-fit or auto-fill keywords
+            >> e.g. grid-template-columns: repeat( auto-fit, minmax(250px, 1fr) );
+            >> These keywords tell the browser to handle the column sizing and element wrapping for us so that the elements will wrap into rows when the width is not large enough to fit them in without any overflow
+            >> fraction unit we used also ensures that in case the width allows for a fraction of a column to fit but not a full column, that space will instead be distributed over the column or columns that already fit, making sure we aren’t left with any empty space at the end of the row
+
+        >> it might seem like auto-fill and auto-fit are opposites
+        >> But in fact, the difference between is quite subtle
+     -->
+
+    <!-- 
+        Fill or Fit? What’s the difference?
+        >> auto-fill:  
+        >> FILLS the row with as many columns as it can fit
+        >> So it creates implicit columns whenever a new column can fit, because it’s trying to FILL the row with as many columns as it can\
+        >> newly added columns can and may be empty, but they will still occupy a designated space in the row
+        
+        >> auto-fit: 
+        >> FITS the CURRENTLY AVAILABLE columns into the space by expanding them so that they take up any available space
+        >> browser does that after FILLING that extra space with extra columns ( as with auto-fill ) and then collapsing the empty ones
+        
+        >> in this example below: 
+            >> columns are defined using the repeat() function and have a minimum width of 100px, and a maximum set to 1fr , so that they would expand and equally share any extra space when it is available
+            >> As for the number of columns per row, we’re going to use the auto-placement keywords, so that we let the browser take care of the responsiveness of the grid and will wrap the columns into new rows when needed
+            >> browser will place and size the columns in the first example using the auto-fill keyword, and it will use auto-fit for the second
+            >> It just so happens that they will give the same result up to a certain viewport width
+            >> point at which these two keywords start exhibiting different behaviors depends on the number and size of columns defined in grid-template-columns, so it will differ from one example to another
+            >> difference between these two keywords is made apparent when the viewport gets wide enough to fit one (or more) extra column(s) (that) into the row
+            >> At that point, the browser is presented with two ways to handle the situation, and how it handles it largely depends on whether or not there is content to be placed into that extra column
+        >> So, when the row can fit a new column, the browser goes like:
+            >> I have some space to fit a new column in there
+                >> Do I have any content (i.e. grid items) to go into that extra column? Yes?
+                >> add the column into the row, and it will wrap into a new row on smaller viewports
+            >> In the case where there is no content to place into a new column: 
+                >> Do I allow this new column to occupy space in the row
+                >> or do I collapse that column and use its space to expand the other columns
+        
+        >> auto-fill and auto-fit provide the answer to that last question in particular, and dictate how the browser should handle this scenario
+        >> To collapse or not to collapse, that is the question, And that is also the answer
+        >> Whether you want it to collapse or not depends on your content, and how you want that content to behave in the context of a responsive design
+        
+        >> auto-fill behavior: 
+            >> fill that row up! Add as many columns as you possibly can
+            >> even if they’re empty — they should all still show up
+            >> If you have enough space to add a column, add it
+            >> it’s still occupying space in the row as if it were filled
+        
+        >> While auto-fill fills the row with as many columns as it can, even if those columns are empty, auto-fit behaves a little differently
+        >> auto-fit does, too, fill the row with more columns are the viewport width increases
+        >> only difference is that the newly added columns (and any column gaps associated with them) are collapsed
+
+        >> auto-fit behavior: 
+            >> make whatever columns you have fit into the available space
+            >> Expand them as much as you need to fit the row size
+            >> Empty columns must not occupy any space
+            >> Put that space to better use by expanding the filled (as in: filled with content/grid items) columns to fit the available row space
+        
+        >> summing up: 
+            >> difference between auto-fill and auto-fit for sizing columns is only noticeable when the row is wide enough to fit more columns in it
+            >> If you’re using auto-fit, the content will stretch to fill the entire row width
+            >> Whereas with auto-fill, the browser will allow empty columns to occupy space in the row like their non-empty neighbors — they will be allocated a fraction of the space even if they have no grid items in them, thus affecting the size/width of the latter
+            
+      -->
+    <div class="fill-fit">
+        <style>
+            /* auto-fill */
+            .grid-container {
+                display: grid;
+            }
+
+            .grid-container--fill {
+                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            }
+
+            .grid-container--fit {
+                grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            }
+            
+            /* auto-fit */
+
+            .grid-element {
+                background-color: deepPink;
+                padding: 20px;
+                color: #fff;
+                border: 1px solid #fff;
+            }
+
+
+            body {
+                padding: 2em;
+            }
+
+            hr {
+                margin: 80px;
+            }
+        </style>
+        <p>auto-fill</p>
+        <div class="grid-container grid-container--fill">
+            <div class="grid-element">
+                1
+            </div>
+            <div class="grid-element">
+                2
+            </div>
+            <div class="grid-element">
+                3
+            </div>
+            <div class="grid-element">
+                4
+            </div>
+            <div class="grid-element">
+                5
+            </div>
+            <div class="grid-element">
+                6
+            </div>
+            <div class="grid-element">
+                7
+            </div>
+        </div>
+
+        <hr>
+
+        <p>auto-fit</p>
+        <div class="grid-container grid-container--fit">
+            <div class="grid-element">
+                1
+            </div>
+            <div class="grid-element">
+                2
+            </div>
+            <div class="grid-element">
+                3
+            </div>
+            <div class="grid-element">
+                4
+            </div>
+            <div class="grid-element">
+                5
+            </div>
+            <div class="grid-element">
+                6
+            </div>
+            <div class="grid-element">
+                7
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
